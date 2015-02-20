@@ -6,11 +6,14 @@ tree = ET.parse('user_data.xml')
 root = tree.getroot()
 
 urls = (
+    '/', 'start',
     '/users', 'list_users',
     '/users/(.*)', 'get_user'
 )
 
-print "app created"
+class start:
+    def GET(self):
+        return 'The Process is starting. Please wait while Wuethrich is going to take a coffee for you.'
 
 class list_users:        
     def GET(self):
@@ -27,7 +30,7 @@ class get_user:
             if child.attrib['id'] == user:
                 return str(child.attrib)
 
-print "start app"
+
 if __name__ == "__main__":
     app = web.application(urls, globals())
     app.run()
