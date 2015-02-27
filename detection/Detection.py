@@ -1,4 +1,26 @@
+from PIL import Image
+#from picamera import PiCamera
+
 class Detection(object):
+    def detect(self):
+        #picam = PiCamera()
+        #picam.resolution = (1280, 720)
+        #picam.exposure_compensation = 2
+        #picam.exposure_mode = 'spotlight'
+        #picam.meter_mode = 'matrix'
+        #picam.image_effect = 'gpen' 
+        # Give the camera some time to adjust to conditions
+        #picam.sleep(2)
+        #picam.capture('foo.jpg')
+        
+        # 1. PICamera verwenden und Parameter setzen
+        # 2. PICamera foto machen
+        # 3. PICamera Foto in PIL laden
+        # 4. PICamera PIL Image Verarbeitung
+        # 5. Foto irgendwo hinspeichern
+        return False
+
+class DetectionConfig(object):
     def __init__(self): 
         self.quality = 100
         self.roiX = 0
@@ -81,4 +103,3 @@ class Detection(object):
     @lineY.setter
     def lineY(self, lineY):
         self.__lineY = lineY
-    
