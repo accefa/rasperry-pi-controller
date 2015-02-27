@@ -153,7 +153,7 @@ class DetectionConfig(object):
     def roiY(self, roiY):
         if roiY < 0:
             roiY = 0
-        self.__roiX = roiY
+        self.__roiY = roiY
     
     @property
     def roiX(self):
