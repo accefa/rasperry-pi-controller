@@ -30,6 +30,11 @@ class DetectionConfigTest(unittest.TestCase):
         value = 10
         self.detection.roix = value
         self.assertEqual(value, self.detection.roix);
+        
+    def test_setAndGetRoiXToLow(self):
+        value = -1
+        self.detection.roix = value
+        self.assertEqual(0, self.detection.roix);
     
     def test_setAndGetRoiY(self):
         value = 9

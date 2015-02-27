@@ -99,6 +99,8 @@ class DetectionConfig(object):
     
     @lineH.setter
     def lineH(self, lineH):
+        if lineH < 1:
+            lineH = 1
         self.__lineH = lineH
     
     @property
@@ -107,6 +109,8 @@ class DetectionConfig(object):
     
     @greyscale.setter
     def greyscale(self, greyscale):
+        if not(isinstance(greyscale, (bool))):
+            greyscale = False
         self.__greyscale = greyscale
     
     @property
@@ -115,6 +119,10 @@ class DetectionConfig(object):
     
     @contrast.setter
     def contrast(self, contrast):
+        if contrast > 100:
+            contrast = 100
+        elif contrast < -100:
+            contrast = -100
         self.__contrast = contrast
     
     @property
@@ -123,6 +131,8 @@ class DetectionConfig(object):
     
     @roiW.setter
     def roiW(self, roiW):
+        if roiW < 1:
+            roiW = 1
         self.__roiW = roiW
     
     @property
@@ -131,6 +141,8 @@ class DetectionConfig(object):
     
     @roiH.setter
     def roiH(self, roiH):
+        if roiH < 1:
+            roiH = 1
         self.__roiH = roiH
     
     @property
@@ -139,6 +151,8 @@ class DetectionConfig(object):
     
     @roiY.setter
     def roiY(self, roiY):
+        if roiY < 0:
+            roiY = 0
         self.__roiX = roiY
     
     @property
@@ -147,6 +161,8 @@ class DetectionConfig(object):
     
     @roiX.setter
     def roiX(self, roiX):
+        if roiX < 0:
+            roiX = 0
         self.__roiX = roiX
     
     @property
@@ -157,8 +173,8 @@ class DetectionConfig(object):
     def quality(self, quality):
         if quality > 100:
             quality = 100
-        elif quality < 0:
-            quality = 0
+        elif quality < 1:
+            quality = 1
         self.__quality = quality
     
     @property
@@ -167,4 +183,6 @@ class DetectionConfig(object):
     
     @lineY.setter
     def lineY(self, lineY):
+        if lineY < 0:
+            lineY = 0
         self.__lineY = lineY
