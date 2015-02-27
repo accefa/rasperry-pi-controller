@@ -1,24 +1,68 @@
 from PIL import Image
-#from picamera import PiCamera
+from PIL import ImageFont
+from PIL import ImageDraw
 
 class Detection(object):
-    def detect(self):
-        #picam = PiCamera()
-        #picam.resolution = (1280, 720)
-        #picam.exposure_compensation = 2
-        #picam.exposure_mode = 'spotlight'
-        #picam.meter_mode = 'matrix'
-        #picam.image_effect = 'gpen' 
-        # Give the camera some time to adjust to conditions
-        #picam.sleep(2)
-        #picam.capture('foo.jpg')
-        
-        # 1. PICamera verwenden und Parameter setzen
-        # 2. PICamera foto machen
-        # 3. PICamera Foto in PIL laden
-        # 4. PICamera PIL Image Verarbeitung
-        # 5. Foto irgendwo hinspeichern
+    def detect(self, detectConfig):
+        imageProcessor = ImageProcessor("greyscaleandcontrast_quality50_17_40.jpg", detectConfig)
+        imageProcessor.processImage()
         return False
+
+class ImageProcessor(object):
+    def __init__(self, imgPath, detectConfig): 
+        self.imgPath = imgPath
+        self.detectConfig = detectConfig
+        self.image = Image.open(imgPath)
+    
+    def processImage(self):
+        y = self.detectConfig.lineY
+        width = self.image.size[0]
+        threshold = 30
+        for x in range(0, width):
+            xy = (x, y)
+            rgb = self.image.getpixel(xy)
+            # if(rgb[0] < threshold):
+            self.image.putpixel(xy, (128,256,0))
+        self.drawAngle(50)
+        self.showImage()
+    
+    def drawAngle(self, angle):
+        font = ImageFont.truetype("Arial.ttf",100)
+        draw = ImageDraw.Draw(self.image)
+        draw.text((10,25), str(angle) + " Grad", font=font, fill=(255,0,0,0))
+    
+    def drawCrosshairs(self, x, y):
+        self.image.show()
+        
+    def saveImage(self, path):
+        self.image.save(path)   
+    
+    def showImage(self):
+        self.image.show()
+        
+    @property
+    def imgPath(self):
+        return self.__imgPath
+    
+    @imgPath.setter
+    def imgPath(self, imgPath):
+        self.__imgPath = imgPath
+    
+    @property
+    def detectConfig(self):
+        return self.__detectConfig
+    
+    @detectConfig.setter
+    def detectConfig(self, detectConfig):
+        self.__detectConfig = detectConfig
+    
+    @property
+    def image(self):
+        return self.__image
+    
+    @image.setter
+    def image(self, image):
+        self.__image = image
 
 class DetectionConfig(object):
     def __init__(self): 
@@ -31,6 +75,15 @@ class DetectionConfig(object):
         self.greyscale = True
         self.lineH = 0
         self.lineY = 5
+        self.pathSaveImageTo = "/tmp/image.jpg"
+    
+    @property
+    def pathSaveImageTo(self):
+        return self.__pathSaveImageTo
+    
+    @pathSaveImageTo.setter
+    def pathSaveImageTo(self, pathSaveImageTo):
+        self.__pathSaveImageTo = pathSaveImageTo
     
     @property
     def lineH(self):

@@ -2,8 +2,9 @@ from detection.Detection import *
 
 print("Detection starten")
 
-detector = Detection()
-print(detector.quality)
-print(detector.lineY)
-
-#detector.detect()
+detection = Detection()
+detectionConfig = DetectionConfig()
+detectionConfig.contrast = 100
+detectionConfig.greyscale = False
+detectionConfig.lineY = 350
+detection.detect(detectionConfig)

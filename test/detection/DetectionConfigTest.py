@@ -10,6 +10,11 @@ class DetectionConfigTest(unittest.TestCase):
         value = 4
         self.detection.quality = value
         self.assertEqual(value, self.detection.quality);
+        
+    def test_setAndGetpathSaveImageTo(self):
+        value = 10
+        self.detection.pathSaveImageTo = value
+        self.assertEqual(value, self.detection.pathSaveImageTo);
 
     def test_setAndGetRoiX(self):
         value = 10
