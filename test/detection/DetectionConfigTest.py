@@ -11,6 +11,16 @@ class DetectionConfigTest(unittest.TestCase):
         self.detection.quality = value
         self.assertEqual(value, self.detection.quality);
         
+    def test_setAndGetQualityToHigh(self):
+        value = 101
+        self.detection.quality = value
+        self.assertEqual(100, self.detection.quality);
+    
+    def test_setAndGetQualityToLow(self):
+        value = -1
+        self.detection.quality = value
+        self.assertEqual(0, self.detection.quality);
+        
     def test_setAndGetpathSaveImageTo(self):
         value = 10
         self.detection.pathSaveImageTo = value

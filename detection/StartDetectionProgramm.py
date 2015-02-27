@@ -6,5 +6,5 @@ detection = Detection()
 detectionConfig = DetectionConfig()
 detectionConfig.contrast = 100
 detectionConfig.greyscale = False
-detectionConfig.lineY = 350
+detectionConfig.lineY = 720
 detection.detect(detectionConfig)

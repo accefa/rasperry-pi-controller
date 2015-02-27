@@ -9,30 +9,38 @@ class Detection(object):
         return False
 
 class ImageProcessor(object):
-    def __init__(self, imgPath, detectConfig): 
-        self.imgPath = imgPath
+    def __init__(self, sourceImagePath, detectConfig): 
+        self.sourceImagePath = sourceImagePath
         self.detectConfig = detectConfig
-        self.image = Image.open(imgPath)
     
     def processImage(self):
-        y = self.detectConfig.lineY
-        width = self.image.size[0]
+        self.image = Image.open(self.sourceImagePath)
+        self.analyzeLine(self.detectConfig.lineY)
+        self.drawAngle(50)
+        self.drawCrosshairs(200, 200)
+        self.showImage()
+        
+    def analyzeLine(self, y):
+        imageWidth = self.image.size[0]
         threshold = 30
-        for x in range(0, width):
+        for x in range(0, imageWidth):
             xy = (x, y)
             rgb = self.image.getpixel(xy)
-            # if(rgb[0] < threshold):
-            self.image.putpixel(xy, (128,256,0))
-        self.drawAngle(50)
-        self.showImage()
+            if(rgb[0] < threshold):
+                self.image.putpixel(xy, (128,256,0))
     
     def drawAngle(self, angle):
         font = ImageFont.truetype("Arial.ttf",100)
         draw = ImageDraw.Draw(self.image)
-        draw.text((10,25), str(angle) + " Grad", font=font, fill=(255,0,0,0))
+        draw.text((0,0), str(angle) + " G.", font=font, fill=(255,0,0,0))
     
-    def drawCrosshairs(self, x, y):
-        self.image.show()
+    def drawCrosshairs(self, pointX, pointY):
+        length = 40
+        draw = ImageDraw.Draw(self.image)
+        draw.line((pointX, pointY + length, pointX, pointY), fill=(255,0,0,0), width=5)
+        draw.line((pointX, pointY - length, pointX, pointY), fill=(255,0,0,0), width=5)
+        draw.line((pointX, pointY, pointX + length, pointY), fill=(255,0,0,0), width=5)
+        draw.line((pointX, pointY, pointX - length, pointY), fill=(255,0,0,0), width=5)
         
     def saveImage(self, path):
         self.image.save(path)   
@@ -41,12 +49,12 @@ class ImageProcessor(object):
         self.image.show()
         
     @property
-    def imgPath(self):
-        return self.__imgPath
+    def sourceImagePath(self):
+        return self.__sourceImagePath
     
-    @imgPath.setter
-    def imgPath(self, imgPath):
-        self.__imgPath = imgPath
+    @sourceImagePath.setter
+    def sourceImagePath(self, sourceImagePath):
+        self.__sourceImagePath = sourceImagePath
     
     @property
     def detectConfig(self):
@@ -147,6 +155,10 @@ class DetectionConfig(object):
     
     @quality.setter
     def quality(self, quality):
+        if quality > 100:
+            quality = 100
+        elif quality < 0:
+            quality = 0
         self.__quality = quality
     
     @property
