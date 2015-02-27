@@ -4,58 +4,67 @@ from PIL import ImageDraw
 
 class Detection(object):
     def detect(self, detectConfig):
-        imageProcessor = ImageProcessor("greyscaleandcontrast_quality50_17_40.jpg", detectConfig)
+        image = Image.open("greyscaleandcontrast_quality50_17_40.jpg")
+        imageProcessor = ImageProcessor(image, detectConfig)
         imageProcessor.processImage()
         return False
 
 class ImageProcessor(object):
-    def __init__(self, sourceImagePath, detectConfig): 
-        self.sourceImagePath = sourceImagePath
+    def __init__(self, image, detectConfig): 
+        self.image = image
         self.detectConfig = detectConfig
     
     def processImage(self):
-        self.image = Image.open(self.sourceImagePath)
         self.analyzeLine(self.detectConfig.lineY)
-        self.drawAngle(50)
-        self.drawCrosshairs(200, 200)
-        self.showImage()
-        
+        self.drawAngle(180) # TODO Pass correct angle
+        self.drawCrosshairs(200, 200) # TODO Pass correct x y coordiantes
+        self.showImage() # instead of show save
+
     def analyzeLine(self, y):
-        imageWidth = self.image.size[0]
-        threshold = 30
-        for x in range(0, imageWidth):
+        # Eine Linie durchgehen
+        # Alle Punkte die unter dem Schwellwert sind, in eine Sequenz speichern
+        # Dann die Sequenz durchgehen und die laengste Reihe nehmen, start und end punkt relevant
+        
+        analizedLine = LineAnalyzing()
+        for x in range(0, self.getImageWidth()):
             xy = (x, y)
             rgb = self.image.getpixel(xy)
-            if(rgb[0] < threshold):
-                self.image.putpixel(xy, (128,256,0))
-    
-    def drawAngle(self, angle):
-        font = ImageFont.truetype("Arial.ttf",100)
+            rgbPoint = RgbPoint(x, y, rgb)
+            analizedLine.addPoint(rgbPoint)
+        
+        analizedLine.analyze()
         draw = ImageDraw.Draw(self.image)
-        draw.text((0,0), str(angle) + " G.", font=font, fill=(255,0,0,0))
+        draw.line((analizedLine.getFirstPoint().x, analizedLine.getFirstPoint().y, analizedLine.getLastPoint().x, analizedLine.getLastPoint().y), fill=(255,0,0,0), width=5)
+        
+    def drawAngle(self, angle):
+        font = ImageFont.truetype("Arial.ttf", 100)
+        draw = ImageDraw.Draw(self.image)
+        x = self.getImageWidth() - 180
+        y = self.getImageHeight() - 110
+        draw.text((x,y), str(angle), font=font, fill=(255,0,0,0)) # TODO Refactor to red
     
     def drawCrosshairs(self, pointX, pointY):
         length = 40
+        crosshairsThickness = 5
+        crosshairsColor = (255,0,0,0) # TODO Refactor to static variable color_red
         draw = ImageDraw.Draw(self.image)
-        draw.line((pointX, pointY + length, pointX, pointY), fill=(255,0,0,0), width=5)
-        draw.line((pointX, pointY - length, pointX, pointY), fill=(255,0,0,0), width=5)
-        draw.line((pointX, pointY, pointX + length, pointY), fill=(255,0,0,0), width=5)
-        draw.line((pointX, pointY, pointX - length, pointY), fill=(255,0,0,0), width=5)
+        draw.line((pointX, pointY + length, pointX, pointY), fill=crosshairsColor, width=crosshairsThickness)
+        draw.line((pointX, pointY - length, pointX, pointY), fill=crosshairsColor, width=crosshairsThickness)
+        draw.line((pointX, pointY, pointX + length, pointY), fill=crosshairsColor, width=crosshairsThickness)
+        draw.line((pointX, pointY, pointX - length, pointY), fill=crosshairsColor, width=crosshairsThickness)
         
-    def saveImage(self, path):
-        self.image.save(path)   
+    def saveImage(self):
+        self.image.save(self.detectConfig.pathSaveImageTo)   
     
     def showImage(self):
         self.image.show()
         
-    @property
-    def sourceImagePath(self):
-        return self.__sourceImagePath
+    def getImageWidth(self):
+        return self.image.size[0]
     
-    @sourceImagePath.setter
-    def sourceImagePath(self, sourceImagePath):
-        self.__sourceImagePath = sourceImagePath
-    
+    def getImageHeight(self):
+        return self.image.size[1]
+        
     @property
     def detectConfig(self):
         return self.__detectConfig
@@ -71,6 +80,51 @@ class ImageProcessor(object):
     @image.setter
     def image(self, image):
         self.__image = image
+        
+class RgbPoint(object):
+    def __init__(self,x,y,rgb):
+        self.x = x
+        self.y = y
+        self.rgb = rgb
+
+class LineSection(object):
+    def __init__(self, xStart, xEnd):
+        self.xStart = xStart
+        self.xEnd = xEnd
+
+class LineAnalyzing(object):
+    def __init__(self): 
+        self.line = []
+        
+    def addPoint(self, rgbPoint):
+        self.line.append(rgbPoint)
+        
+    def analyze(self):
+        self.eliminiatePointsOverThreshold()
+        self.eliminateIrrelvantSection()
+        
+    def eliminiatePointsOverThreshold(self):
+        newLine = []
+        threshold = 30
+        for rgbPoint in self.line:
+            if (rgbPoint.rgb[0] < threshold):
+                newLine.append(rgbPoint)
+        
+    def eliminateIrrelvantSection(self):
+        sections = []
+                    
+        firstPoint = self.line[0]
+        for index, value in enumerate(self.line):
+            if (len(self.line) == index + 1):
+                sections.append(LineSection(firstPoint.x, value.x))
+            elif value.x != (self.line[index + 1].x - 1):
+                sections.append(LineSection(firstPoint.x, value.x))
+        
+    def getFirstPoint(self):
+        return self.line[0]
+        
+    def getLastPoint(self):
+        return self.line[-1]
 
 class DetectionConfig(object):
     def __init__(self): 
