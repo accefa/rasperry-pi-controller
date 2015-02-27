@@ -1,10 +1,10 @@
 import unittest
-from detection.Detection import Detection
+from detection.Detection import DetectionConfig
 
-class DetectionTest(unittest.TestCase):
+class DetectionConfigTest(unittest.TestCase):
 
     def setUp(self):
-        self.detection = Detection()
+        self.detection = DetectionConfig()
 
     def test_setAndGetQuality(self):
         value = 4
