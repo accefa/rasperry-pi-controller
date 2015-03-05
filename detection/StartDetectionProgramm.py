@@ -6,7 +6,8 @@ detection = Detection()
 detectionConfig = DetectionConfig()
 detectionConfig.contrast = 100
 detectionConfig.greyscale = True
-detectionConfig.lineY = 950
-detectionConfig.lineH = 40
-detectionConfig.greyscaleThreshold=30
+detectionConfig.lineY = 1000
+detectionConfig.lineH = 275
+detectionConfig.pathSaveImageTo = 'test.jpg'
+detectionConfig.greyscaleThreshold=28
 detection.detect(detectionConfig)

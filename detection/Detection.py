@@ -25,7 +25,8 @@ class ImageProcessor(object):
         xPoint = self.analyzeLine(self.detectConfig.lineY, self.detectConfig.lineH)
         self.drawAngle(180) # TODO Pass correct angle
         self.drawCrosshairs(xPoint, self.detectConfig.lineY)
-        self.showImage() # instead of show, save
+        #self.showImage() # instead of show, save
+        self.saveImage()
 
     def analyzeLine(self, yPos, rangeHeight):
         sectionCalculator = SectionCalculator()
@@ -56,8 +57,8 @@ class ImageProcessor(object):
         draw.text((x,y), str(angle), font=font, fill=self.COLOR_RED())
     
     def drawCrosshairs(self, pointX, pointY):
-        length = 40
-        crosshairsThickness = 5
+        length = 50
+        crosshairsThickness = 10
         crosshairsColor = self.COLOR_YELLOW()
         draw = ImageDraw.Draw(self.image)
         draw.line((pointX, pointY + length, pointX, pointY), fill=crosshairsColor, width=crosshairsThickness)
