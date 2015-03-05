@@ -2,6 +2,7 @@ from PIL import Image
 from PIL import ImageFont
 from PIL import ImageDraw
 
+# Detektions-Klasse. Interagiert mit der Kamera.
 class Detection(object):
     def detect(self, detectConfig):
         image = Image.open("greyscaleandcontrast_quality50_17_40.jpg")
@@ -13,45 +14,51 @@ class ImageProcessor(object):
     def __init__(self, image, detectConfig): 
         self.image = image
         self.detectConfig = detectConfig
+
+    def COLOR_RED(self):
+        return (255,0,0,0)
+    
+    def COLOR_YELLOW(self):
+        return (255,255,0,0)
     
     def processImage(self):
-        xPoint = self.analyzeLine(self.detectConfig.lineY)
+        xPoint = self.analyzeLine(self.detectConfig.lineY, self.detectConfig.lineH)
         self.drawAngle(180) # TODO Pass correct angle
-        self.drawCrosshairs(xPoint, self.detectConfig.lineY) # TODO Pass correct x y coordiantes
-        self.showImage() # instead of show save
+        self.drawCrosshairs(xPoint, self.detectConfig.lineY)
+        self.showImage() # instead of show, save
 
-    def analyzeLine(self, yPos):
-        # Eine Linie durchgehen
-        # Alle Punkte die unter dem Schwellwert sind, in eine Sequenz speichern
-        # Dann die Sequenz durchgehen und die laengste Reihe nehmen, start und end punkt relevant
+    def analyzeLine(self, yPos, rangeHeight):
         sectionCalculator = SectionCalculator()
-        start = yPos - 10
-        end = yPos + 10
+        start = yPos - rangeHeight
+        end = yPos + rangeHeight
         for y in range(start, end):
-            analizedLine = LineAnalyzing(y)
+            analizedLine = LineAnalyzing(y, self.detectConfig.greyscaleThreshold)
             for x in range(0, self.getImageWidth()):
                 xy = (x, y)
                 rgb = self.image.getpixel(xy)
                 rgbPoint = RgbPoint(x, y, rgb)
                 analizedLine.addPoint(rgbPoint)
             analizedLine.analyze()
-            draw = ImageDraw.Draw(self.image)
-            draw.line((analizedLine.getFirstPoint().x, analizedLine.getFirstPoint().y, analizedLine.getLastPoint().x, analizedLine.getLastPoint().y), fill=(255,0,0,0), width=1)
+            self.drawLine(analizedLine.getFirstPoint().x, analizedLine.getFirstPoint().y, analizedLine.getLastPoint().x, analizedLine.getLastPoint().y)
             sectionCalculator.addSection(analizedLine.getLongestSection())
         
         return sectionCalculator.getAverageX()
+        
+    def drawLine(self, xStart, yStart, xEnd, yEnd):
+        draw = ImageDraw.Draw(self.image)
+        draw.line((xStart, yStart, xEnd, yEnd), fill=self.COLOR_RED(), width=1)
         
     def drawAngle(self, angle):
         font = ImageFont.truetype("Arial.ttf", 100)
         draw = ImageDraw.Draw(self.image)
         x = self.getImageWidth() - 180
         y = self.getImageHeight() - 110
-        draw.text((x,y), str(angle), font=font, fill=(255,0,0,0)) # TODO Refactor to red
+        draw.text((x,y), str(angle), font=font, fill=self.COLOR_RED())
     
     def drawCrosshairs(self, pointX, pointY):
         length = 40
         crosshairsThickness = 5
-        crosshairsColor = (255,255,0,0) # TODO Refactor to static variable color_red
+        crosshairsColor = self.COLOR_YELLOW()
         draw = ImageDraw.Draw(self.image)
         draw.line((pointX, pointY + length, pointX, pointY), fill=crosshairsColor, width=crosshairsThickness)
         draw.line((pointX, pointY - length, pointX, pointY), fill=crosshairsColor, width=crosshairsThickness)
@@ -92,7 +99,10 @@ class SectionCalculator(object):
         self.sections = []
         
     def addSection(self, section):
-        self.sections.append(section)
+        if isinstance(section, LineSection):
+            self.sections.append(section)
+        else:
+            raise Exception("addSection does only support LineSection")
         
     def getAverageX(self):
         xValues = []
@@ -103,15 +113,16 @@ class SectionCalculator(object):
         return avg
 
 class LineAnalyzing(object):
-    def __init__(self, y): 
+    def __init__(self, y, greyscaleThreshold): 
         self.y = y
         self.line = []
         self.sections = []
+        self.greyscaleThreshold = greyscaleThreshold
         
     def addPoint(self, rgbPoint):
         if isinstance(rgbPoint, RgbPoint):
             self.line.append(rgbPoint)
-        else: 
+        else:
             raise Exception("addPoint does only support RgbPoint")
 
     def analyze(self):
@@ -127,27 +138,30 @@ class LineAnalyzing(object):
     
     def eliminiatePointsOverThreshold(self):
         newLine = []
-        threshold = 30
         for rgbPoint in self.line:
-            if (rgbPoint.rgb[0] <= threshold):
+            if (rgbPoint.rgb[0] <= self.greyscaleThreshold):
                 newLine.append(rgbPoint)
         self.line = newLine
         
     def createSections(self):
         sections = []
 
+        if len(self.line) == 0:
+            self.sections = sections
+            return
+
         goToNextPoint = False
-        firstPoint = self.line[0] # TODO index zugriff
+        tmpPoint = self.line[0]
         for index, currentPoint in enumerate(self.line):
             if goToNextPoint:
-                firstPoint = currentPoint
+                tmpPoint = currentPoint
                 goToNextPoint = False
                 
             if (len(self.line) == index + 1):
                 # am ende der linie
-                sections.append(LineSection(self.y, firstPoint.x, currentPoint.x))
+                sections.append(LineSection(self.y, tmpPoint.x, currentPoint.x))
             elif currentPoint.x != (self.line[index + 1].x - 1):
-                sections.append(LineSection(self.y, firstPoint.x, currentPoint.x))
+                sections.append(LineSection(self.y, tmpPoint.x, currentPoint.x))
                 goToNextPoint = True
                 
         self.sections = sections
@@ -254,6 +268,7 @@ class DetectionConfig(object):
         self.lineH = 0
         self.lineY = 5
         self.pathSaveImageTo = "/tmp/image.jpg"
+        self.greyscaleThreshold = 30
     
     @property
     def pathSaveImageTo(self):
@@ -334,6 +349,18 @@ class DetectionConfig(object):
         if roiX < 0:
             roiX = 0
         self.__roiX = roiX
+        
+    @property
+    def greyscaleThreshold(self):
+        return self.__greyscaleThreshold
+    
+    @greyscaleThreshold.setter
+    def greyscaleThreshold(self, greyscaleThreshold):
+        if greyscaleThreshold > 255:
+            greyscaleThreshold = 255
+        elif greyscaleThreshold < 0:
+            greyscaleThreshold = 0
+        self.__greyscaleThreshold = greyscaleThreshold
     
     @property
     def quality(self):

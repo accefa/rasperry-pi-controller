@@ -10,17 +10,31 @@ class SectionCalculatorTest(unittest.TestCase):
 
     def setUp(self):
         self.sectionCalculator = SectionCalculator()
-
-    def test_getAverageX(self):
         self.sectionCalculator.addSection(LineSection(50, 10, 20))
         self.sectionCalculator.addSection(LineSection(50, 15, 21))
         self.sectionCalculator.addSection(LineSection(50, 5, 25))
+
+    def test_addSection(self):
+        self.assertEqual(3, len(self.sectionCalculator.sections));
+    
+    def test_addSectionException(self):
+        try:
+            self.sectionCalculator.addSection(LineSection(50, 10, 20))
+            self.fail("Es muesste hier eine Exception geworfen werden.")
+        except Exception as e:
+            a = 0;
+
+    def test_getAverageX(self):
         self.assertEqual(16, self.sectionCalculator.getAverageX());
+        
+    def test_getAverageXNotDecimal(self):
+        self.assertEqual(16, self.sectionCalculator.getAverageX());
+        
 
 class LineAnalyzingTest(unittest.TestCase):
 
     def setUp(self):
-        self.analyze = LineAnalyzing(5)
+        self.analyze = LineAnalyzing(5, 50)
 
     def test_addPointException(self):
         try:
@@ -60,20 +74,13 @@ class LineAnalyzingTest(unittest.TestCase):
         self.assertEqual(21, self.analyze.sections[3].xEnd);
     
     def test_eliminiatePointsOverThreshold(self):
-        p1 = RgbPoint(0, 1, [150])
-        p2 = RgbPoint(0, 1, [60])
-        p3 = RgbPoint(0, 1, [180])
-        p4 = RgbPoint(0, 1, [255])
-        p5 = RgbPoint(0, 1, [70])
-        p6 = RgbPoint(0, 1, [200])
-        p7 = RgbPoint(0, 1, [5])
-        self.analyze.addPoint(p1)
-        self.analyze.addPoint(p2)
-        self.analyze.addPoint(p3)
-        self.analyze.addPoint(p4)
-        self.analyze.addPoint(p5)
-        self.analyze.addPoint(p6)
-        self.analyze.addPoint(p7)
+        self.analyze.addPoint(RgbPoint(0, 1, [150]))
+        self.analyze.addPoint(RgbPoint(0, 1, [60]))
+        self.analyze.addPoint(RgbPoint(0, 1, [180]))
+        self.analyze.addPoint(RgbPoint(0, 1, [255]))
+        self.analyze.addPoint(RgbPoint(0, 1, [70]))
+        self.analyze.addPoint(RgbPoint(0, 1, [200]))
+        self.analyze.addPoint(RgbPoint(0, 1, [5]))
         self.analyze.eliminiatePointsOverThreshold()
         self.assertEqual(1, len(self.analyze.line));
     
@@ -302,6 +309,21 @@ class DetectionConfigTest(unittest.TestCase):
         value = -1
         self.detection.lineY = value
         self.assertEqual(0, self.detection.lineY);
+        
+    def test_setAndGetGreyscaleTreshold(self):
+        value = 77
+        self.detection.greyscaleThreshold = value
+        self.assertEqual(value, self.detection.greyscaleThreshold);
+        
+    def test_setAndGetGreyscaleTresholdToLow(self):
+        value = -1
+        self.detection.greyscaleThreshold = value
+        self.assertEqual(0, self.detection.greyscaleThreshold);
+        
+    def test_setAndGetGreyscaleTresholdToHigh(self):
+        value = 256
+        self.detection.greyscaleThreshold = value
+        self.assertEqual(255, self.detection.greyscaleThreshold);
 
 if __name__ == '__main__':
     unittest.main()
