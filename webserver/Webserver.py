@@ -1,4 +1,5 @@
 import web;
+import json;
 
 urls = (
   '/', 'index',
@@ -7,8 +8,11 @@ urls = (
   '/start', 'start'
 )
 
+app = web.application(urls, globals())
+
 class index:
     def GET(self):
+        web.header('Content-type', 'text/html') 
         return "Hello, world!"
     
 class camera:
@@ -16,7 +20,18 @@ class camera:
         return "GET Camera"
     
     def PUT(self):
-        return "PUT Camera"
+        try:
+            jsonData = web.data()
+            config = json.loads(jsonData)
+            
+            with open('config.json', 'w') as f:
+                json.dump(config, f)
+            
+            web.header('Content-type', 'text/json')
+            web.accepted
+        except (TypeError, ValueError) as e:
+            web.notacceptable()
+            web.header('Content-type', 'text/json')
     
 class image:
     def GET(self):
@@ -30,5 +45,4 @@ class start:
         return "PUT Start"
     
 if __name__ == "__main__": 
-    app = web.application(urls, globals())
     app.run()  
