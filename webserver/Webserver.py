@@ -10,6 +10,8 @@ urls = (
 
 app = web.application(urls, globals())
 
+CONFIG_FILE_PATH = 'config.json'
+
 class index:
     def GET(self):
         web.header('Content-type', 'text/html') 
@@ -17,14 +19,23 @@ class index:
     
 class camera:
     def GET(self):
-        return "GET Camera"
+        try:            
+            with open(CONFIG_FILE_PATH) as configFile:
+                config = json.load(configFile)
+            
+            web.header('Content-type', 'text/json')
+            web.accepted
+            return json.dumps(config)
+        except (TypeError, ValueError) as e:
+            web.internalerror()
+            web.header('Content-type', 'text/json')
     
     def PUT(self):
         try:
             jsonData = web.data()
             config = json.loads(jsonData)
             
-            with open('config.json', 'w') as f:
+            with open(CONFIG_FILE_PATH, 'w') as f:
                 json.dump(config, f)
             
             web.header('Content-type', 'text/json')
