@@ -1,11 +1,14 @@
 from PIL import Image
 from PIL import ImageFont
 from PIL import ImageDraw
+# from Camera import CameraController
 
 # Detektions-Klasse. Interagiert mit der Kamera.
 class Detection(object):
     def detect(self, detectConfig):
         image = Image.open("greyscaleandcontrast_quality50_17_40.jpg")
+        # cameraController = CameraController()
+        # image = cameraController.shoot(detectConfig)
         imageProcessor = ImageProcessor(image, detectConfig)
         imageProcessor.processImage()
         return False
@@ -21,7 +24,17 @@ class ImageProcessor(object):
     def COLOR_YELLOW(self):
         return (255,255,0,0)
     
+    def cropImage(self):
+        cropX = self.detectConfig.cropX
+        left = cropX
+        top = 0
+        width = self.getImageWidth() - cropX
+        height = self.getImageHeight()
+        box = (left, top, width, height)
+        self.image = self.image.crop((box))
+    
     def processImage(self):
+        self.cropImage()
         xPoint = self.analyzeLine(self.detectConfig.lineY, self.detectConfig.lineH)
         self.drawAngle(180) # TODO Pass correct angle
         self.drawCrosshairs(xPoint, self.detectConfig.lineY)
@@ -260,10 +273,7 @@ class RgbPoint(Point):
 class DetectionConfig(object):
     def __init__(self): 
         self.quality = 100
-        self.roiX = 0
-        self.roiY = 0
-        self.roiH = 0
-        self.roiW = 0
+        self.cropX = 0
         self.contrast = 0
         self.greyscale = True
         self.lineH = 0
@@ -312,44 +322,14 @@ class DetectionConfig(object):
         self.__contrast = contrast
     
     @property
-    def roiW(self):
-        return self.__roiW
+    def cropX(self):
+        return self.__cropX
     
-    @roiW.setter
-    def roiW(self, roiW):
-        if roiW < 1:
-            roiW = 1
-        self.__roiW = roiW
-    
-    @property
-    def roiH(self):
-        return self.__roiH
-    
-    @roiH.setter
-    def roiH(self, roiH):
-        if roiH < 1:
-            roiH = 1
-        self.__roiH = roiH
-    
-    @property
-    def roiY(self):
-        return self.__roiY
-    
-    @roiY.setter
-    def roiY(self, roiY):
-        if roiY < 0:
-            roiY = 0
-        self.__roiY = roiY
-    
-    @property
-    def roiX(self):
-        return self.__roiX
-    
-    @roiX.setter
-    def roiX(self, roiX):
-        if roiX < 0:
-            roiX = 0
-        self.__roiX = roiX
+    @cropX.setter
+    def cropX(self, cropX):
+        if cropX < 0:
+            cropX = 0
+        self.__cropX = cropX
         
     @property
     def greyscaleThreshold(self):

@@ -225,45 +225,15 @@ class DetectionConfigTest(unittest.TestCase):
         self.detection.pathSaveImageTo = value
         self.assertEqual(value, self.detection.pathSaveImageTo);
 
-    def test_setAndGetRoiX(self):
+    def test_setAndGetCropX(self):
         value = 10
-        self.detection.roiX = value
-        self.assertEqual(value, self.detection.roiX);
+        self.detection.cropX = value
+        self.assertEqual(value, self.detection.cropX);
         
-    def test_setAndGetRoiXToLow(self):
+    def test_setAndGetCropXToLow(self):
         value = -1
-        self.detection.roiX = value
-        self.assertEqual(0, self.detection.roiX);
-    
-    def test_setAndGetRoiY(self):
-        value = 9
-        self.detection.roiY = value
-        self.assertEqual(value, self.detection.roiY);
-        
-    def test_setAndGetRoiYToLow(self):
-        value = -1
-        self.detection.roiY = value
-        self.assertEqual(0, self.detection.roiY);
-    
-    def test_setAndGetRoiH(self):
-        value = 55
-        self.detection.roiH = value
-        self.assertEqual(value, self.detection.roiH);
-    
-    def test_setAndGetRoiHToLow(self):
-        value = 0
-        self.detection.roiH = value
-        self.assertEqual(1, self.detection.roiH);
-    
-    def test_setAndGetRoiW(self):
-        value = 66
-        self.detection.roiW = value
-        self.assertEqual(value, self.detection.roiW);
-    
-    def test_setAndGetRoiWToLow(self):
-        value = 0
-        self.detection.roiW = value
-        self.assertEqual(1, self.detection.roiW);
+        self.detection.cropX = value
+        self.assertEqual(0, self.detection.cropX);
     
     def test_setAndGetContrast(self):
         value = 66
@@ -279,7 +249,7 @@ class DetectionConfigTest(unittest.TestCase):
         value = 101
         self.detection.contrast = value
         self.assertEqual(100, self.detection.contrast);
-        
+    
     def test_setAndGetGreyscale(self):
         value = True
         self.detection.greyscale = value
