@@ -28,8 +28,8 @@ class ImageProcessor(object):
         cropX = self.detectConfig.cropX
         left = cropX
         top = 0
-        width = self.getImageWidth() - cropX
-        height = self.getImageHeight()
+        width = self.getImageWidth() - left
+        height = self.getImageHeight() - top
         box = (left, top, width, height)
         self.image = self.image.crop((box))
     

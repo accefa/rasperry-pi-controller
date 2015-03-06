@@ -11,6 +11,7 @@ class CameraController(object):
         
         self.picamera = PiCamera();
         self.picamera.contrast = detectConfig.contrast
+        self.picamera.resolution = (1280, 720) # Come on we define a fixed size
         if detectConfig.greyscale:
             self.picamera.color_effects = (128, 128) # grayscale
         self.picamera.capture(stream, "jpeg", False, False, 0, quality=detectConfig.quality)
