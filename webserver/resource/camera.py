@@ -4,7 +4,7 @@ import web
 
 
 urls = (
-    "(.*)", "camera"
+    "(.*)", "Camera"
 )
 
 app_camera = web.application(urls, locals())
@@ -12,7 +12,7 @@ app_camera = web.application(urls, locals())
 CONFIG_FILE_PATH = 'config.json'
 
 
-class camera:
+class Camera:
     def GET(self, path):
         try:
             with open(CONFIG_FILE_PATH) as config_file:
