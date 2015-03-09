@@ -2,7 +2,7 @@ import unittest
 import json
 from paste.fixture import TestApp
 from nose.tools import *
-from Webserver import app
+from webserver.main import app
 
 class TestCode(unittest.TestCase):
 

@@ -2,7 +2,7 @@ import json
 import unittest
 from paste.fixture import TestApp
 from nose.tools import *
-from webserver.Webserver import app
+from webserver.main import app
 from webserver.resource.camera import CONFIG_FILE_PATH
 
 class CameraTest(unittest.TestCase):
