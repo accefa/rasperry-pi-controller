@@ -3,6 +3,7 @@ from paste.fixture import TestApp
 from webserver.main import app
 from nose.tools import *
 
+
 class ImageTest(unittest.TestCase):
     def setUp(self):
         middleware = []
@@ -11,3 +12,7 @@ class ImageTest(unittest.TestCase):
     def test_image_get(self):
         request = self.testApp.get("/image")
         assert_equals(request.status, 200)
+
+
+if __name__ == "__main__":
+    unittest.main()
