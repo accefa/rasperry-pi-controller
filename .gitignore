@@ -1,3 +1,11 @@
+# Configuration Files
+*config.json*
+
+# IntelliJ IDEA
+.idea/
+atlassian-ide-plugin.xml
+rasperry-pi-controller.iml
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
