@@ -1,16 +1,14 @@
-import json
-
 import web
 
 
 urls = (
-    "(.*)", "start"
+    "(.*)", "Start"
 )
 
 app_start = web.application(urls, locals())
 
 
-class start:
+class Start:
     def GET(self, path):
         web.header('Content-type', 'text/html')
         return "GET Start"

@@ -1,7 +1,10 @@
 import unittest
 from paste.fixture import TestApp
-from webserver.main import app
+
 from nose.tools import *
+
+from webserver.main import app
+
 
 class StartTest(unittest.TestCase):
     def setUp(self):
@@ -15,6 +18,7 @@ class StartTest(unittest.TestCase):
     def test_start_put(self):
         request = self.testApp.put("/start")
         assert_equals(request.status, 200)
+
 
 if __name__ == "__main__":
     unittest.main()
