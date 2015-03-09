@@ -2,7 +2,7 @@ import unittest
 import json
 from paste.fixture import TestApp
 from nose.tools import *
-from Webserver import app, CONFIG_FILE_PATH
+from Webserver import app
 
 class TestCode(unittest.TestCase):
 
@@ -19,33 +19,6 @@ class TestCode(unittest.TestCase):
         r = self.testApp.get('/')
         assert_equal(r.status, 200)
         r.mustcontain('Hello, world!')
-    
-    def test_camera_get(self):
-        self.write_valid_json_to_config()
-        r = self.testApp.get('/camera')
-        assert_equal(r.status, 200)
-        r.mustcontain(self._validJSON)
-        
-    def test_camera_get_invalid_json(self):
-        self.write_invalid_json_to_config()
-        r = self.testApp.get('/camera', expect_errors=True)
-        assert_equal(r.status, 500)
-         
-    def test_camera_put_invalid_json(self):
-        r = self.testApp.put('/camera', self._invalidJSON, expect_errors=True)
-        assert_equal(r.status, 406)
-         
-    def test_camera_put_json(self):
-        r = self.testApp.put('/camera', self._validJSON)
-        assert_equal(r.status, 200)
-        
-    def write_valid_json_to_config(self):
-        with open(CONFIG_FILE_PATH, 'w') as configFile:
-            configFile.write(self._validJSON)
-        
-    def write_invalid_json_to_config(self):
-        with open(CONFIG_FILE_PATH, 'w') as configFile:
-            configFile.write(self._invalidJSON)
 
 if __name__ == "__main__": 
     unittest.main()
