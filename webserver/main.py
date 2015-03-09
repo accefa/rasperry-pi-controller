@@ -1,10 +1,11 @@
 import web
 from webserver.resource.camera import app_camera
+from webserver.resource.image import app_image
 
 urls = (
   '/', 'index',
   '/camera', app_camera,
-  '/image', 'image',
+  '/image', app_image,
   '/start', 'start'
 )
 
@@ -14,10 +15,6 @@ class index:
     def GET(self):
         web.header('Content-type', 'text/html') 
         return "Hello, world!"
-
-class image:
-    def GET(self):
-        return "GET Image"
 
 class start:
     def GET(self):
