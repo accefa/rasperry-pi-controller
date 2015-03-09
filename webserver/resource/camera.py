@@ -7,14 +7,17 @@ urls = (
     "(.*)", "camera"
 )
 
+app_camera = web.application(urls, locals())
+
 CONFIG_FILE_PATH = 'config.json'
+
 
 class camera:
     def GET(self, path):
-        try:            
-            with open(CONFIG_FILE_PATH) as configFile:
-                config = json.load(configFile)
-            
+        try:
+            with open(CONFIG_FILE_PATH) as config_file:
+                config = json.load(config_file)
+
             web.header('Content-type', 'text/json')
             web.ok()
             return json.dumps(config)
@@ -22,23 +25,18 @@ class camera:
             print e.message
             web.header('Content-type', 'text/json')
             web.internalerror()
-    
+
     def PUT(self, path):
         try:
-            jsonData = web.data()
-            config = json.loads(jsonData)
-            
-            with open(CONFIG_FILE_PATH, 'w') as f:
-                json.dump(config, f)
-            
+            json_data = web.data()
+            config = json.loads(json_data)
+
+            with open(CONFIG_FILE_PATH, 'w') as config_file:
+                json.dump(config, config_file)
+
             web.header('Content-type', 'text/json')
             web.ok()
         except (TypeError, ValueError) as e:
             print e.message
             web.header('Content-type', 'text/json')
             web.notacceptable()
-            
-app_camera = web.application(urls, locals())
-
-if __name__ == "__main__": 
-    app_camera.run()  
