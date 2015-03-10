@@ -72,8 +72,8 @@ class DetectionConfigTest(unittest.TestCase):
         self.detection.set_from_dict(image_path_dict)
         self.assertEquals(self.IMAGE_PATH_NORMAL, self.detection.image_path)
 
-    def test_set_from_dict_all(self):
-        dict = {
+    def test_set_get_from_dict_all(self):
+        set_dict = {
             DetectionConfig.QUALITY_KEY: self.QUALITY_NORMAL,
             DetectionConfig.CROP_X_KEY: self.CROP_X_NORMAL,
             DetectionConfig.CONTRAST_KEY: self.CONTRAST_NORMAL,
@@ -83,15 +83,9 @@ class DetectionConfigTest(unittest.TestCase):
             DetectionConfig.LINE_Y_KEY: self.LINE_Y_NORMAL,
             DetectionConfig.IMAGE_PATH_KEY: self.IMAGE_PATH_NORMAL
         }
-        self.detection.set_from_dict(dict)
-        self.assertEquals(self.QUALITY_NORMAL, self.detection.quality)
-        self.assertEquals(self.CROP_X_NORMAL, self.detection.crop_x)
-        self.assertEquals(self.CONTRAST_NORMAL, self.detection.contrast)
-        self.assertEquals(self.GREYSCALE_NORMAL, self.detection.greyscale)
-        self.assertEquals(self.GREYSCALE_THRESHOLD_NORMAL, self.detection.greyscale_threshold)
-        self.assertEquals(self.LINE_H_NORMAL, self.detection.line_h)
-        self.assertEquals(self.LINE_Y_NORMAL, self.detection.line_y)
-        self.assertEquals(self.IMAGE_PATH_NORMAL, self.detection.image_path)
+        self.detection.set_from_dict(set_dict)
+        get_dict = self.detection.get_as_dict()
+        self.assertEquals(set_dict, get_dict)
 
     def test_set_get_quality(self):
         self.detection.quality = self.QUALITY_NORMAL

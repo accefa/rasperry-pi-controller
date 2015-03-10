@@ -47,6 +47,18 @@ class DetectionConfig(object):
         if self.IMAGE_PATH_KEY in dict:
             self.image_path = dict[self.IMAGE_PATH_KEY]
 
+    def get_as_dict(self):
+        return {
+            self.QUALITY_KEY: self.quality,
+            self.CROP_X_KEY: self.crop_x,
+            self.CONTRAST_KEY: self.contrast,
+            self.GREYSCALE_KEY: self.greyscale,
+            self.GREYSCALE_THRESHOLD_KEY: self.greyscale_threshold,
+            self.LINE_H_KEY: self.line_h,
+            self.LINE_Y_KEY: self.line_y,
+            self.IMAGE_PATH_KEY: self.image_path
+        }
+
     @property
     def quality(self):
         return self.__quality
