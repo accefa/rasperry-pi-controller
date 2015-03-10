@@ -1,0 +1,10 @@
+{
+  "line_y": 0, 
+  "line_h": 1, 
+  "greyscale_threshold": 0, 
+  "greyscale": false, 
+  "quality": 1, 
+  "crop_x": 10, 
+  "contrast": 50, 
+  "image_path": "some/path/to/nowhere"
+}
