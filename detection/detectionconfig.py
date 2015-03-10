@@ -59,6 +59,9 @@ class DetectionConfig(object):
             self.IMAGE_PATH_KEY: self.image_path
         }
 
+    def __str__(self):
+        return self.get_as_dict().__str__()
+
     @property
     def quality(self):
         return self.__quality
