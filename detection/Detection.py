@@ -25,7 +25,7 @@ class ImageProcessor(object):
         return (255,255,0,0)
     
     def cropImage(self):
-        cropX = self.detectConfig.cropX
+        cropX = self.detectConfig.crop_x
         left = cropX
         top = 0
         width = self.getImageWidth() - left
@@ -35,9 +35,9 @@ class ImageProcessor(object):
     
     def processImage(self):
         self.cropImage()
-        xPoint = self.analyzeLine(self.detectConfig.lineY, self.detectConfig.lineH)
+        xPoint = self.analyzeLine(self.detectConfig.line_y, self.detectConfig.line_h)
         self.drawAngle(180) # TODO Pass correct angle
-        self.drawCrosshairs(xPoint, self.detectConfig.lineY)
+        self.drawCrosshairs(xPoint, self.detectConfig.line_y)
         #self.showImage() # instead of show, save
         self.saveImage()
 
@@ -46,7 +46,7 @@ class ImageProcessor(object):
         start = yPos - rangeHeight
         end = yPos + rangeHeight
         for y in range(start, end):
-            analizedLine = LineAnalyzing(y, self.detectConfig.greyscaleThreshold)
+            analizedLine = LineAnalyzing(y, self.detectConfig.greyscale_threshold)
             for x in range(0, self.getImageWidth()):
                 xy = (x, y)
                 rgb = self.image.getpixel(xy)
@@ -80,7 +80,7 @@ class ImageProcessor(object):
         draw.line((pointX, pointY, pointX - length, pointY), fill=crosshairsColor, width=crosshairsThickness)
         
     def saveImage(self):
-        self.image.save(self.detectConfig.pathSaveImageTo)   
+        self.image.save(self.detectConfig.image_path)
     
     def showImage(self):
         self.image.show()
