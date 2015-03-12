@@ -9,8 +9,8 @@ class Detection(object):
         image = Image.open("../../images/greyscaleandcontrast_quality50_17_40.jpg")
         # cameraController = CameraController()
         # image = cameraController.shoot(detectConfig)
-        imageProcessor = ImageProcessor(image, detectConfig)
-        imageProcessor.processImage()
+        image_processor = ImageProcessor(image, detectConfig)
+        image_processor.process_image()
         return False
 
 
@@ -25,17 +25,17 @@ class ImageProcessor(object):
     def COLOR_YELLOW(self):
         return (255, 255, 0, 0)
 
-    def cropImage(self):
-        cropX = self.detectConfig.crop_x
-        left = cropX
+    def crop_image(self):
+        crop_x = self.detectConfig.crop_x
+        left = crop_x
         top = 0
         width = self.getImageWidth() - left
         height = self.getImageHeight() - top
         box = (left, top, width, height)
         self.image = self.image.crop((box))
 
-    def processImage(self):
-        self.cropImage()
+    def process_image(self):
+        self.crop_image()
         xPoint = self.analyzeLine(self.detectConfig.line_y, self.detectConfig.line_h)
         self.drawAngle(180)  # TODO Pass correct angle
         self.drawCrosshairs(xPoint, self.detectConfig.line_y)

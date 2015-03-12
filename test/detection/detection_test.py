@@ -1,9 +1,9 @@
 import unittest
-from detection.Detection import RgbPoint
-from detection.Detection import LineSection
-from detection.Detection import LineAnalyzing
-from detection.Detection import Point
-from detection.Detection import SectionCalculator
+from detection.detection import RgbPoint
+from detection.detection import LineSection
+from detection.detection import LineAnalyzing
+from detection.detection import Point
+from detection.detection import SectionCalculator
 
 
 class SectionCalculatorTest(unittest.TestCase):
