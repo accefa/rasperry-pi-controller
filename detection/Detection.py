@@ -6,7 +6,7 @@ from PIL import ImageDraw
 # Detektions-Klasse. Interagiert mit der Kamera.
 class Detection(object):
     def detect(self, detectConfig):
-        image = Image.open("greyscaleandcontrast_quality50_17_40.jpg")
+        image = Image.open("../../images/greyscaleandcontrast_quality50_17_40.jpg")
         # cameraController = CameraController()
         # image = cameraController.shoot(detectConfig)
         imageProcessor = ImageProcessor(image, detectConfig)
