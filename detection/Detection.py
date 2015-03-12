@@ -13,17 +13,18 @@ class Detection(object):
         imageProcessor.processImage()
         return False
 
+
 class ImageProcessor(object):
-    def __init__(self, image, detectConfig): 
+    def __init__(self, image, detectConfig):
         self.image = image
         self.detectConfig = detectConfig
 
     def COLOR_RED(self):
-        return (255,0,0,0)
-    
+        return (255, 0, 0, 0)
+
     def COLOR_YELLOW(self):
-        return (255,255,0,0)
-    
+        return (255, 255, 0, 0)
+
     def cropImage(self):
         cropX = self.detectConfig.crop_x
         left = cropX
@@ -32,13 +33,13 @@ class ImageProcessor(object):
         height = self.getImageHeight() - top
         box = (left, top, width, height)
         self.image = self.image.crop((box))
-    
+
     def processImage(self):
         self.cropImage()
         xPoint = self.analyzeLine(self.detectConfig.line_y, self.detectConfig.line_h)
-        self.drawAngle(180) # TODO Pass correct angle
+        self.drawAngle(180)  # TODO Pass correct angle
         self.drawCrosshairs(xPoint, self.detectConfig.line_y)
-        #self.showImage() # instead of show, save
+        # self.showImage() # instead of show, save
         self.saveImage()
 
     def analyzeLine(self, yPos, rangeHeight):
@@ -53,22 +54,23 @@ class ImageProcessor(object):
                 rgbPoint = RgbPoint(x, y, rgb)
                 analizedLine.addPoint(rgbPoint)
             analizedLine.analyze()
-            self.drawLine(analizedLine.getFirstPoint().x, analizedLine.getFirstPoint().y, analizedLine.getLastPoint().x, analizedLine.getLastPoint().y)
+            self.drawLine(analizedLine.getFirstPoint().x, analizedLine.getFirstPoint().y, analizedLine.getLastPoint().x,
+                          analizedLine.getLastPoint().y)
             sectionCalculator.addSection(analizedLine.getLongestSection())
-        
+
         return sectionCalculator.getAverageX()
-        
+
     def drawLine(self, xStart, yStart, xEnd, yEnd):
         draw = ImageDraw.Draw(self.image)
         draw.line((xStart, yStart, xEnd, yEnd), fill=self.COLOR_RED(), width=1)
-        
+
     def drawAngle(self, angle):
         font = ImageFont.truetype("Arial.ttf", 100)
         draw = ImageDraw.Draw(self.image)
         x = self.getImageWidth() - 180
         y = self.getImageHeight() - 110
-        draw.text((x,y), str(angle), font=font, fill=self.COLOR_RED())
-    
+        draw.text((x, y), str(angle), font=font, fill=self.COLOR_RED())
+
     def drawCrosshairs(self, pointX, pointY):
         length = 50
         crosshairsThickness = 10
@@ -78,46 +80,46 @@ class ImageProcessor(object):
         draw.line((pointX, pointY - length, pointX, pointY), fill=crosshairsColor, width=crosshairsThickness)
         draw.line((pointX, pointY, pointX + length, pointY), fill=crosshairsColor, width=crosshairsThickness)
         draw.line((pointX, pointY, pointX - length, pointY), fill=crosshairsColor, width=crosshairsThickness)
-        
+
     def saveImage(self):
         self.image.save(self.detectConfig.image_path)
-    
+
     def showImage(self):
         self.image.show()
-        
+
     def getImageWidth(self):
         return self.image.size[0]
-    
+
     def getImageHeight(self):
         return self.image.size[1]
-        
+
     @property
     def detectConfig(self):
         return self.__detectConfig
-    
+
     @detectConfig.setter
     def detectConfig(self, detectConfig):
         self.__detectConfig = detectConfig
-    
+
     @property
     def image(self):
         return self.__image
-    
+
     @image.setter
     def image(self, image):
         self.__image = image
 
 
 class SectionCalculator(object):
-    def __init__(self): 
+    def __init__(self):
         self.sections = []
-        
+
     def addSection(self, section):
         if isinstance(section, LineSection):
             self.sections.append(section)
         else:
             raise Exception("addSection does only support LineSection")
-        
+
     def getAverageX(self):
         xValues = []
         for section in self.sections:
@@ -126,13 +128,14 @@ class SectionCalculator(object):
         avg = reduce(lambda x, y: x + y, xValues) / len(xValues)
         return avg
 
+
 class LineAnalyzing(object):
-    def __init__(self, y, greyscaleThreshold): 
+    def __init__(self, y, greyscaleThreshold):
         self.y = y
         self.line = []
         self.sections = []
         self.greyscaleThreshold = greyscaleThreshold
-        
+
     def addPoint(self, rgbPoint):
         if isinstance(rgbPoint, RgbPoint):
             self.line.append(rgbPoint)
@@ -142,21 +145,21 @@ class LineAnalyzing(object):
     def analyze(self):
         self.eliminiatePointsOverThreshold()
         self.createSections()
-    
+
     def getLongestSection(self):
         longestSection = self.sections[0]
         for section in self.sections:
             if longestSection.getWidth() < section.getWidth():
                 longestSection = section
         return longestSection
-    
+
     def eliminiatePointsOverThreshold(self):
         newLine = []
         for rgbPoint in self.line:
             if (rgbPoint.rgb[0] <= self.greyscaleThreshold):
                 newLine.append(rgbPoint)
         self.line = newLine
-        
+
     def createSections(self):
         sections = []
 
@@ -170,23 +173,24 @@ class LineAnalyzing(object):
             if goToNextPoint:
                 tmpPoint = currentPoint
                 goToNextPoint = False
-                
+
             if (len(self.line) == index + 1):
                 # am ende der linie
                 sections.append(LineSection(self.y, tmpPoint.x, currentPoint.x))
             elif currentPoint.x != (self.line[index + 1].x - 1):
                 sections.append(LineSection(self.y, tmpPoint.x, currentPoint.x))
                 goToNextPoint = True
-                
+
         self.sections = sections
-        
+
     def getFirstPoint(self):
         longestSection = self.getLongestSection()
         return Point(longestSection.xStart, self.y)
-        
+
     def getLastPoint(self):
         longestSection = self.getLongestSection()
         return Point(longestSection.xEnd, self.y)
+
 
 # Daten-Objekt. Eine einzelne Line-Sektion.
 class LineSection(object):
@@ -194,76 +198,78 @@ class LineSection(object):
         self.y = y
         self.xStart = xStart
         self.xEnd = xEnd
-    
+
     @property
     def y(self):
         return self.__y
-    
+
     @y.setter
     def y(self, y):
         if y < 0:
             y = 0
         self.__y = y
-        
+
     @property
     def xStart(self):
         return self.__xStart
-    
+
     @xStart.setter
     def xStart(self, xStart):
         if xStart < 0:
             xStart = 0
         self.__xStart = xStart
-    
+
     @property
     def xEnd(self):
         return self.__xEnd
-    
+
     @xEnd.setter
     def xEnd(self, xEnd):
         if xEnd < 0:
             xEnd = 0
         self.__xEnd = xEnd
-    
+
     def getWidth(self):
         return self.xEnd - self.xStart
 
+
 # Datenobjekt. Ein Pixel.
 class Point(object):
-    def __init__(self,x,y):
+    def __init__(self, x, y):
         self.x = x
         self.y = y
-    
+
     @property
     def x(self):
         return self.__x
-    
+
     @x.setter
     def x(self, x):
         if x < 0:
             x = 0
         self.__x = x
-    
+
     @property
     def y(self):
         return self.__y
-    
+
     @y.setter
     def y(self, y):
         if y < 0:
             y = 0
         self.__y = y
-        
+
+
 # Daten-Objekt. RGB-Punkt mit Positionswerten.
 class RgbPoint(Point):
-    def __init__(self,x,y,rgb):
+    def __init__(self, x, y, rgb):
         Point.__init__(self, x, y)
         self.rgb = rgb
-    
+
     @property
     def rgb(self):
         return self.__rgb
-    
+
     @rgb.setter
     def rgb(self, rgb):
         self.__rgb = rgb
