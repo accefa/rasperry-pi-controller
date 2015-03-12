@@ -2,6 +2,9 @@ import json
 from paste.fixture import TestApp
 import unittest
 from webserver.main import app
+import detection.detectionconfig as detectionconfig
+from webserver.resource import camera
+
 
 class CameraTest(unittest.TestCase):
     def __init__(self, method_name):
@@ -17,6 +20,18 @@ class CameraTest(unittest.TestCase):
         request = self.testApp.get('/camera')
         self.assertEquals(request.status, 200)
         self.assertEquals(request.header_dict['content-type'], 'text/json')
+        request.mustcontain(
+            camera.CONFIG_KEY,
+            detectionconfig.QUALITY_KEY,
+            detectionconfig.CROP_X_KEY,
+            detectionconfig.CONTRAST_KEY,
+            detectionconfig.GREYSCALE_KEY,
+            detectionconfig.GREYSCALE_THRESHOLD_KEY,
+            detectionconfig.LINE_H_KEY,
+            detectionconfig.LINE_Y_KEY,
+            camera.IMAGE_KEY,
+            no=detectionconfig.IMAGE_PATH_KEY
+        )
 
     def test_camera_put_invalid_json(self):
         request = self.testApp.put('/camera', self._invalidJSON, expect_errors=True)
