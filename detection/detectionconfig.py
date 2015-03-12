@@ -6,36 +6,43 @@
 import os
 import json
 
+QUALITY_DEFAULT = 90
+QUALITY_KEY = 'quality'
+
+CROP_X_DEFAULT = 0
+CROP_X_KEY = 'crop_x'
+
+CONTRAST_DEFAULT = 0
+CONTRAST_KEY = 'contrast'
+
+GREYSCALE_DEFAULT = True
+GREYSCALE_KEY = 'greyscale'
+
+GREYSCALE_THRESHOLD_DEFAULT = 0
+GREYSCALE_THRESHOLD_KEY = 'greyscale_threshold'
+
+LINE_H_DEFAULT = 1
+LINE_H_KEY = 'line_h'
+
+LINE_Y_DEFAULT = 0
+LINE_Y_KEY = 'line_y'
+
+IMAGE_PATH_DEFAULT = os.path.dirname(__file__) + '/../images'
+IMAGE_PATH_KEY = 'image_path'
+
 
 class DetectionConfig(object):
     CONFIG_FILE_PATH = os.path.dirname(__file__) + '/../config.json'
 
-    __QUALITY_DEFAULT = 90
-    _QUALITY_KEY = 'quality'
-    __CROP_X_DEFAULT = 0
-    _CROP_X_KEY = 'crop_x'
-    __CONTRAST_DEFAULT = 0
-    _CONTRAST_KEY = 'contrast'
-    __GREYSCALE_DEFAULT = True
-    _GREYSCALE_KEY = 'greyscale'
-    __GREYSCALE_THRESHOLD_DEFAULT = 0
-    _GREYSCALE_THRESHOLD_KEY = 'greyscale_threshold'
-    __LINE_H_DEFAULT = 1
-    _LINE_H_KEY = 'line_h'
-    __LINE_Y_DEFAULT = 0
-    _LINE_Y_KEY = 'line_y'
-    __IMAGE_PATH_DEFAULT = os.path.dirname(__file__) + '/../images'
-    _IMAGE_PATH_KEY = 'image_path'
-
     __default_dict = {
-        _QUALITY_KEY: __QUALITY_DEFAULT,
-        _CROP_X_KEY: __CROP_X_DEFAULT,
-        _CONTRAST_KEY: __CONTRAST_DEFAULT,
-        _GREYSCALE_KEY: __GREYSCALE_DEFAULT,
-        _GREYSCALE_THRESHOLD_KEY: __GREYSCALE_THRESHOLD_DEFAULT,
-        _LINE_H_KEY: __LINE_H_DEFAULT,
-        _LINE_Y_KEY: __LINE_Y_DEFAULT,
-        _IMAGE_PATH_KEY: __IMAGE_PATH_DEFAULT
+        QUALITY_KEY: QUALITY_DEFAULT,
+        CROP_X_KEY: CROP_X_DEFAULT,
+        CONTRAST_KEY: CONTRAST_DEFAULT,
+        GREYSCALE_KEY: GREYSCALE_DEFAULT,
+        GREYSCALE_THRESHOLD_KEY: GREYSCALE_THRESHOLD_DEFAULT,
+        LINE_H_KEY: LINE_H_DEFAULT,
+        LINE_Y_KEY: LINE_Y_DEFAULT,
+        IMAGE_PATH_KEY: IMAGE_PATH_DEFAULT
     }
 
     __populate_in_progress = False
@@ -50,14 +57,14 @@ class DetectionConfig(object):
 
     def get_as_dict(self):
         return {
-            self._QUALITY_KEY: self.quality,
-            self._CROP_X_KEY: self.crop_x,
-            self._CONTRAST_KEY: self.contrast,
-            self._GREYSCALE_KEY: self.greyscale,
-            self._GREYSCALE_THRESHOLD_KEY: self.greyscale_threshold,
-            self._LINE_H_KEY: self.line_h,
-            self._LINE_Y_KEY: self.line_y,
-            self._IMAGE_PATH_KEY: self.image_path
+            QUALITY_KEY: self.quality,
+            CROP_X_KEY: self.crop_x,
+            CONTRAST_KEY: self.contrast,
+            GREYSCALE_KEY: self.greyscale,
+            GREYSCALE_THRESHOLD_KEY: self.greyscale_threshold,
+            LINE_H_KEY: self.line_h,
+            LINE_Y_KEY: self.line_y,
+            IMAGE_PATH_KEY: self.image_path
         }
 
     def __read(self):
@@ -76,29 +83,29 @@ class DetectionConfig(object):
     def __populate(self, config_dict):
         self.__populate_in_progress = True
 
-        if self._QUALITY_KEY in config_dict:
-            self.quality = config_dict[self._QUALITY_KEY]
+        if QUALITY_KEY in config_dict:
+            self.quality = config_dict[QUALITY_KEY]
 
-        if self._CROP_X_KEY in config_dict:
-            self.crop_x = config_dict[self._CROP_X_KEY]
+        if CROP_X_KEY in config_dict:
+            self.crop_x = config_dict[CROP_X_KEY]
 
-        if self._CONTRAST_KEY in config_dict:
-            self.contrast = config_dict[self._CONTRAST_KEY]
+        if CONTRAST_KEY in config_dict:
+            self.contrast = config_dict[CONTRAST_KEY]
 
-        if self._GREYSCALE_KEY in config_dict:
-            self.greyscale = config_dict[self._GREYSCALE_KEY]
+        if GREYSCALE_KEY in config_dict:
+            self.greyscale = config_dict[GREYSCALE_KEY]
 
-        if self._GREYSCALE_THRESHOLD_KEY in config_dict:
-            self.greyscale_threshold = config_dict[self._GREYSCALE_THRESHOLD_KEY]
+        if GREYSCALE_THRESHOLD_KEY in config_dict:
+            self.greyscale_threshold = config_dict[GREYSCALE_THRESHOLD_KEY]
 
-        if self._LINE_H_KEY in config_dict:
-            self.line_h = config_dict[self._LINE_H_KEY]
+        if LINE_H_KEY in config_dict:
+            self.line_h = config_dict[LINE_H_KEY]
 
-        if self._LINE_Y_KEY in config_dict:
-            self.line_y = config_dict[self._LINE_Y_KEY]
+        if LINE_Y_KEY in config_dict:
+            self.line_y = config_dict[LINE_Y_KEY]
 
-        if self._IMAGE_PATH_KEY in config_dict:
-            self.image_path = config_dict[self._IMAGE_PATH_KEY]
+        if IMAGE_PATH_KEY in config_dict:
+            self.image_path = config_dict[IMAGE_PATH_KEY]
 
         self.__populate_in_progress = False
 
