@@ -3,6 +3,9 @@
 atlassian-ide-plugin.xml
 rasperry-pi-controller.iml
 
+# Konfiguration auf jedem PC unterschiedlich
+/config.json
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

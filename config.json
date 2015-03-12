@@ -2,9 +2,9 @@
   "line_y": 0, 
   "line_h": 1, 
   "greyscale_threshold": 0, 
-  "greyscale": false, 
-  "quality": 1, 
-  "crop_x": 10, 
-  "contrast": 50, 
-  "image_path": "some/path/to/nowhere"
+  "greyscale": true, 
+  "quality": 90, 
+  "crop_x": 0, 
+  "contrast": 10, 
+  "image_path": "C:\\Users\\User\\Documents\\Informatikstudium\\Module\\4. Semester\\Produktentwicklung 2\\rasperry-pi-controller\\detection/../images/basket.jpeg"
 }
