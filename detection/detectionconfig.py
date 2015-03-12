@@ -1,7 +1,9 @@
 # coding=utf-8
-# Diese Klasse repräsentiert die Konfiguration welche in der Datei config.json im Hauptverzeichnisses des Projektes
-# gespeichert ist. Normalerweise werden die Werte über die Methoden set/get_from_dict oder direkt über die Properties
-# bearbeitet. Es ist auch möglich die Datei config.json zu bearbeiten.
+"""
+Diese Klasse repräsentiert die Konfiguration welche in der Datei config.json im Hauptverzeichnisses des Projektes
+gespeichert ist. Normalerweise werden die Werte über die Methoden set/get_from_dict oder direkt über die Properties
+bearbeitet. Es ist auch möglich die Datei config.json zu bearbeiten.
+"""
 
 import os
 import json
@@ -30,6 +32,9 @@ LINE_Y_KEY = 'line_y'
 IMAGE_PATH_DEFAULT = os.path.dirname(__file__) + '/../images'
 IMAGE_PATH_KEY = 'image_path'
 
+IMAGE_NAME_DEFAULT = 'basket.jpeg'
+IMAGE_NAME_KEY = 'image_name'
+
 
 class DetectionConfig(object):
     CONFIG_FILE_PATH = os.path.dirname(__file__) + '/../config.json'
@@ -42,7 +47,8 @@ class DetectionConfig(object):
         GREYSCALE_THRESHOLD_KEY: GREYSCALE_THRESHOLD_DEFAULT,
         LINE_H_KEY: LINE_H_DEFAULT,
         LINE_Y_KEY: LINE_Y_DEFAULT,
-        IMAGE_PATH_KEY: IMAGE_PATH_DEFAULT
+        IMAGE_PATH_KEY: IMAGE_PATH_DEFAULT,
+        IMAGE_NAME_KEY: IMAGE_NAME_DEFAULT
     }
 
     __populate_in_progress = False
@@ -64,7 +70,8 @@ class DetectionConfig(object):
             GREYSCALE_THRESHOLD_KEY: self.greyscale_threshold,
             LINE_H_KEY: self.line_h,
             LINE_Y_KEY: self.line_y,
-            IMAGE_PATH_KEY: self.image_path
+            IMAGE_PATH_KEY: self.image_path,
+            IMAGE_NAME_KEY: self.image_name
         }
 
     def __read(self):
@@ -106,6 +113,9 @@ class DetectionConfig(object):
 
         if IMAGE_PATH_KEY in config_dict:
             self.image_path = config_dict[IMAGE_PATH_KEY]
+
+        if IMAGE_NAME_KEY in config_dict:
+            self.image_name = config_dict[IMAGE_NAME_KEY]
 
         self.__populate_in_progress = False
 
@@ -223,6 +233,16 @@ class DetectionConfig(object):
     @image_path.setter
     def image_path(self, image_path):
         self.__image_path = image_path
+        self.__save()
+
+    @property
+    def image_name(self):
+        self.__read_from_property()
+        return self.__image_name
+
+    @image_name.setter
+    def image_name(self, image_name):
+        self.__image_name = image_name
         self.__save()
 
     def __str__(self):

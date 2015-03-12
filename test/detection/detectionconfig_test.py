@@ -28,6 +28,8 @@ LINE_Y_LOW = -1
 
 IMAGE_PATH_NORMAL = 'some/path/to/nowhere'
 
+IMAGE_NAME_NORMAL = 'normal_image.jpeg'
+
 TEST_CONFIG_FILE_PATH = os.path.dirname(__file__) + '/../config_test.json'
 
 
@@ -88,7 +90,8 @@ class DetectionConfigTest(unittest.TestCase):
             detectionconfig.GREYSCALE_THRESHOLD_KEY: GREYSCALE_THRESHOLD_NORMAL,
             detectionconfig.LINE_H_KEY: LINE_H_NORMAL,
             detectionconfig.LINE_Y_KEY: LINE_Y_NORMAL,
-            detectionconfig.IMAGE_PATH_KEY: IMAGE_PATH_NORMAL
+            detectionconfig.IMAGE_PATH_KEY: IMAGE_PATH_NORMAL,
+            detectionconfig.IMAGE_NAME_KEY: IMAGE_NAME_NORMAL
         }
         self.detection.set_from_dict(set_dict)
         get_dict = self.detection.get_as_dict()
@@ -165,6 +168,10 @@ class DetectionConfigTest(unittest.TestCase):
     def test_set_get_image_path(self):
         self.detection.image_path = IMAGE_PATH_NORMAL
         self.assertEqual(IMAGE_PATH_NORMAL, self.detection.image_path)
+
+    def test_set_get_image_name(self):
+        self.detection.image_name = IMAGE_NAME_NORMAL
+        self.assertEquals(IMAGE_NAME_NORMAL, self.detection.image_name)
 
 
 if __name__ == '__main__':
