@@ -15,7 +15,7 @@ class Image:
 
         config = DetectionConfig()
 
-        image_folder = config.image_path
+        image_folder = os.path.dirname(config.image_path)
         image_path = os.path.join(image_folder, file_name)
 
         content_type = {
