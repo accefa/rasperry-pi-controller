@@ -73,7 +73,7 @@ class DetectionConfig(object):
         try:
             config_dict = self.__read_config_from_file()
             self.__populate(config_dict)
-        except (TypeError, ValueError) as e:
+        except (TypeError, ValueError, IOError) as e:
             config_dict = self.__default_dict
             self.__populate(config_dict)
             self.__save()
