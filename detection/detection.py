@@ -86,7 +86,7 @@ class ImageProcessor(object):
         draw.line((xStart, yStart, xEnd, yEnd), fill=self.COLOR_RED(), width=1)
 
     def drawAngle(self, angle):
-        font = ImageFont.truetype("Arial.ttf", 100)
+        font = ImageFont.truetype(os.path.dirname(os.path.realpath(__file__)) + "/../config/Arial.ttf", 100)
         draw = ImageDraw.Draw(self.image)
         x = self.getImageWidth() - 180
         y = self.getImageHeight() - 110
