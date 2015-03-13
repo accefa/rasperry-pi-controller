@@ -1,4 +1,4 @@
-from detection.Detection import *
+from detection.detection import Detection
 from detection.detectionconfig import DetectionConfig
 
 print("Detection starten")
@@ -9,7 +9,7 @@ detectionConfig.contrast = 100
 detectionConfig.greyscale = True
 detectionConfig.line_y = 1000
 detectionConfig.line_h = 200
-detectionConfig.crop_x = 400
+detectionConfig.crop_x = 1500
 detectionConfig.image_path = '../../runtime/detected.jpg'
 detectionConfig.greyscale_threshold=28
 detection.detect(detectionConfig)

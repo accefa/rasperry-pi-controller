@@ -2,6 +2,7 @@ import os
 from PIL import Image
 from PIL import ImageFont
 from PIL import ImageDraw
+import logging
 # from Camera import CameraController
 
 # Detektions-Klasse. Interagiert mit der Kamera.
@@ -27,20 +28,25 @@ class ImageProcessor(object):
         return (255, 255, 0, 0)
 
     def crop_image(self):
-        crop_x = self.detectConfig.crop_x
-        left = crop_x
-        top = 0
-        width = self.getImageWidth() - left
-        height = self.getImageHeight() - top
-        box = (left, top, width, height)
-        self.image = self.image.crop((box))
+        cropx = self.detectConfig.crop_x
+        # Bild-Breite muss groesser als das doppelte von crop_x sein
+        if self.getImageWidth() > (2 * cropx):
+            left = cropx
+            top = 0
+            width = self.getImageWidth() - left
+            height = self.getImageHeight() - top
+            box = (left, top, width, height)
+            self.image = self.image.crop((box))
+        else:
+            logging.warning('Kein seitlicher Zuschnitt. Cropx ist mit ' + str(cropx) + ' gross. Bild ist nur ' + str(self.getImageWidth()) + '.')
+            # TODO warning
+        
 
     def process_image(self):
         self.crop_image()
         xPoint = self.analyzeLine(self.detectConfig.line_y, self.detectConfig.line_h)
         self.drawAngle(180)  # TODO Pass correct angle
         self.drawCrosshairs(xPoint, self.detectConfig.line_y)
-        # self.showImage() # instead of show, save
         self.saveImage()
 
     def analyzeLine(self, yPos, rangeHeight):
