@@ -13,7 +13,6 @@ urls = (
 
 app_camera = web.application(urls, locals())
 
-CONFIG_FILE_PATH = 'config.json'
 CONFIG_KEY = 'config'
 IMAGE_KEY = 'image'
 
