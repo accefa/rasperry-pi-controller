@@ -1,9 +1,11 @@
 import os
 import web
 from config.detectionconfig import DetectionConfig
+from detection.detection import Detection
+import logging
 
 urls = (
-    "/(.*)", "Image"
+    "(.*)", "Image"
 )
 
 app_image = web.application(urls, locals())
@@ -14,6 +16,9 @@ class Image:
         extension = file_name.split(".")[-1]
 
         config = DetectionConfig()
+        
+        detection = Detection()
+        detection.detect(config)
 
         image_folder = os.path.dirname(config.image_path)
         image_path = os.path.join(image_folder, file_name)

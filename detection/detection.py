@@ -3,17 +3,17 @@ from PIL import Image
 from PIL import ImageFont
 from PIL import ImageDraw
 import logging
-# from Camera import CameraController
+from Camera import CameraController
 
 # Detektions-Klasse. Interagiert mit der Kamera.
 class Detection(object):
     def detect(self, detectConfig):
-        image = Image.open(os.path.dirname(__file__) + "/../images/greyscaleandcontrast_quality50_17_40.jpg")
-        # cameraController = CameraController()
-        # image = cameraController.shoot(detectConfig)
+        # image = Image.open(os.path.dirname(__file__) + "/../images/greyscaleandcontrast_quality50_17_40.jpg")
+        logging.debug("Starte Detektierung")
+        cameraController = CameraController()
+        image = cameraController.shoot(detectConfig)
         image_processor = ImageProcessor(image, detectConfig)
         image_processor.process_image()
-        return False
 
 
 class ImageProcessor(object):
