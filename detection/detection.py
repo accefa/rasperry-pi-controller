@@ -83,8 +83,8 @@ class ImageProcessor(object):
         crosshairsThickness = 10
         crosshairsColor = self.COLOR_YELLOW()
         draw = ImageDraw.Draw(self.image)
-        draw.line((pointX, pointY + length, pointX, pointY), fill=crosshairsColor, width=crosshairsThickness)
-        draw.line((pointX, pointY - length, pointX, pointY), fill=crosshairsColor, width=crosshairsThickness)
+        draw.line((pointX, pointY, pointX, pointY + length), fill=crosshairsColor, width=crosshairsThickness)
+        draw.line((pointX, pointY, pointX, pointY - length), fill=crosshairsColor, width=crosshairsThickness)
         draw.line((pointX, pointY, pointX + length, pointY), fill=crosshairsColor, width=crosshairsThickness)
         draw.line((pointX, pointY, pointX - length, pointY), fill=crosshairsColor, width=crosshairsThickness)
 
