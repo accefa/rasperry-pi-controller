@@ -29,7 +29,6 @@ class ImageProcessor(object):
 
     def crop_image(self):
         cropx = self.detectConfig.crop_x
-        # Bild-Breite muss groesser als das doppelte von crop_x sein
         if self.getImageWidth() > (2 * cropx):
             left = cropx
             top = 0
@@ -38,7 +37,7 @@ class ImageProcessor(object):
             box = (left, top, width, height)
             self.image = self.image.crop((box))
         else:
-            logging.warning('Kein seitlicher Zuschnitt. Cropx ist mit ' + str(cropx) + ' gross. Bild ist nur ' + str(self.getImageWidth()) + '.')
+            logging.warning('Kein seitlicher Zuschnitt. Cropx ist mit ' + str(cropx) + ' gross. Bild ist nur ' + str(self.getImageWidth()) + ' breit.')
             # TODO warning
         
 
@@ -50,9 +49,24 @@ class ImageProcessor(object):
         self.saveImage()
 
     def analyzeLine(self, yPos, rangeHeight):
+        if yPos > self.getImageHeight():
+            logging.warning('Keine Analyse. Y-Position ist mit ' + str(yPos) + ' zu gross. Bild ist nur ' + str(self.getImageHeight()) + ' gross.')
+            return 0
+        
+        if self.getImageHeight() < (rangeHeight * 2):
+            logging.warning('Keine Analyse. Y-Analyse Band ist mit ' + str(rangeHeight) + ' zu gross. Bild ist nur ' + str(self.getImageHeight()) + ' gross.')
+            return 0
+        
         sectionCalculator = SectionCalculator()
+        
         start = yPos - rangeHeight
+        if start < 0:
+            start = 0
+
         end = yPos + rangeHeight
+        if end > self.getImageHeight():
+            end = self.getImageHeight()
+            
         for y in range(start, end):
             analizedLine = LineAnalyzing(y, self.detectConfig.greyscale_threshold)
             for x in range(0, self.getImageWidth()):
@@ -61,10 +75,10 @@ class ImageProcessor(object):
                 rgbPoint = RgbPoint(x, y, rgb)
                 analizedLine.addPoint(rgbPoint)
             analizedLine.analyze()
-            self.drawLine(analizedLine.getFirstPoint().x, analizedLine.getFirstPoint().y, analizedLine.getLastPoint().x,
-                          analizedLine.getLastPoint().y)
-            sectionCalculator.addSection(analizedLine.getLongestSection())
-
+            if analizedLine.hasSection():
+                self.drawLine(analizedLine.getFirstPoint().x, analizedLine.getFirstPoint().y, analizedLine.getLastPoint().x,
+                              analizedLine.getLastPoint().y)
+                sectionCalculator.addSection(analizedLine.getLongestSection())
         return sectionCalculator.getAverageX()
 
     def drawLine(self, xStart, yStart, xEnd, yEnd):
@@ -153,7 +167,13 @@ class LineAnalyzing(object):
         self.eliminiatePointsOverThreshold()
         self.createSections()
 
+    def hasSection(self):
+        return len(self.sections) != 0
+
     def getLongestSection(self):
+        if not self.hasSection():
+            return None
+        
         longestSection = self.sections[0]
         for section in self.sections:
             if longestSection.getWidth() < section.getWidth():
@@ -192,10 +212,14 @@ class LineAnalyzing(object):
 
     def getFirstPoint(self):
         longestSection = self.getLongestSection()
+        if longestSection is None:
+            return Point(0, 0)
         return Point(longestSection.xStart, self.y)
 
     def getLastPoint(self):
         longestSection = self.getLongestSection()
+        if longestSection is None:
+            return Point(0, 0)
         return Point(longestSection.xEnd, self.y)
 
 
