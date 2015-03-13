@@ -1,9 +1,4 @@
 # coding=utf-8
-"""
-Diese Klasse repräsentiert die Konfiguration welche in der Datei config.json im Hauptverzeichnisses des Projektes
-gespeichert ist. Normalerweise werden die Werte über die Methoden set/get_from_dict oder direkt über die Properties
-bearbeitet. Es ist auch möglich die Datei config.json zu bearbeiten.
-"""
 
 import os
 import json
@@ -34,7 +29,7 @@ IMAGE_PATH_KEY = 'image_path'
 
 
 class DetectionConfig(object):
-    CONFIG_FILE_PATH = os.path.dirname(__file__) + '/../config.json'
+    CONFIG_FILE_PATH = os.path.dirname(__file__) + '/detection_config.json'
 
     __default_dict = {
         QUALITY_KEY: QUALITY_DEFAULT,

@@ -1,6 +1,7 @@
 import os
 import unittest
-import detection.detectionconfig as detectionconfig
+import config.detectionconfig as detectionconfig
+
 
 QUALITY_NORMAL = 4
 QUALITY_HIGH = 100

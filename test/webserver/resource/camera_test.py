@@ -1,8 +1,8 @@
 import json
-from paste.fixture import TestApp
 import unittest
+from paste.fixture import TestApp
 from webserver.main import app
-import detection.detectionconfig as detectionconfig
+import config.detectionconfig as detectionconfig
 from webserver.resource import camera
 
 

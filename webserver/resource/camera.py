@@ -1,10 +1,9 @@
 import json
 import os
 import socket
-
 import web
-from detection import detectionconfig
-from detection.detectionconfig import DetectionConfig
+from config import detectionconfig
+from config.detectionconfig import DetectionConfig
 
 
 urls = (
@@ -15,6 +14,7 @@ app_camera = web.application(urls, locals())
 
 CONFIG_KEY = 'config'
 IMAGE_KEY = 'image'
+
 
 class Camera:
     def GET(self, path):

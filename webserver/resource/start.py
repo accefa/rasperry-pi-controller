@@ -1,7 +1,7 @@
-import web
 import json
+import web
 from detection.detection import Detection
-from detection.detectionconfig import DetectionConfig
+from config.detectionconfig import DetectionConfig
 
 
 urls = (
@@ -11,6 +11,7 @@ urls = (
 app_start = web.application(urls, locals())
 
 CALLBACK_URL_KEY = 'url'
+
 
 class Start:
     def PUT(self, path):

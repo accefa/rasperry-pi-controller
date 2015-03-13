@@ -1,6 +1,6 @@
-import web
 import os
-from detection.detectionconfig import DetectionConfig
+import web
+from config.detectionconfig import DetectionConfig
 
 urls = (
     "/(.*)", "Image"
