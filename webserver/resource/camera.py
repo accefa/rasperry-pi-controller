@@ -4,7 +4,7 @@ import socket
 import web
 from config import detectionconfig
 from config.detectionconfig import DetectionConfig
-
+from detection.detection import Detection 
 
 urls = (
     "(.*)", "Camera"
@@ -19,7 +19,11 @@ IMAGE_KEY = 'image'
 class Camera:
     def GET(self, path):
         try:
-            config_dict = DetectionConfig().get_as_dict()
+            detectionConfig = DetectionConfig()
+            detection = Detection()
+            detection.detect(detectionConfig)
+            
+            config_dict = detectionConfig.get_as_dict()
             image_url = self.get_image_url(config_dict[detectionconfig.IMAGE_PATH_KEY])
             response_dict = {
                 CONFIG_KEY: config_dict,
@@ -52,5 +56,4 @@ class Camera:
 
     def get_image_url(self, image_path):
         image_name = os.path.basename(image_path)
-        host_address = socket.gethostbyname(socket.gethostname())
-        return 'http://{0}/image/{1}'.format(host_address, image_name)
+        return '/static/{0}'.format(image_name)
