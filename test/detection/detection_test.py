@@ -26,6 +26,27 @@ class SectionCalculatorTest(unittest.TestCase):
     def test_getAverageX(self):
         self.assertEqual(16, self.sectionCalculator.getAverageX())
 
+    def test_calculateAvg(self):
+        values = []
+        values.append(5)
+        values.append(5)
+        values.append(11)
+        avg = self.sectionCalculator.calculateAvg(values)
+        self.assertEqual(7, avg)
+    
+    def test_calculateAvgInvalidArgument(self):
+        values = []
+        avg = self.sectionCalculator.calculateAvg(values)
+        self.assertEqual(0, avg)
+        
+        values;
+        avg = self.sectionCalculator.calculateAvg(values)
+        self.assertEqual(0, avg)
+        
+        values = False
+        avg = self.sectionCalculator.calculateAvg(values)
+        self.assertEqual(0, avg)
+
     def test_getAverageXNotDecimal(self):
         self.assertEqual(16, self.sectionCalculator.getAverageX())
 

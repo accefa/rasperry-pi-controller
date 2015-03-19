@@ -1,5 +1,5 @@
 import os
-from PIL import Image
+#from PIL import Image
 from PIL import ImageFont
 from PIL import ImageDraw
 import logging
@@ -8,8 +8,11 @@ from Camera import CameraController
 # Detektions-Klasse. Interagiert mit der Kamera.
 class Detection(object):
     def detect(self, detectConfig):
-        # image = Image.open(os.path.dirname(__file__) + "/../images/greyscaleandcontrast_quality50_17_40.jpg")
+        
         logging.debug("Starte Detektierung")
+        
+        # image = Image.open(os.path.dirname(__file__) + "/../images/greyscaleandcontrast_quality50_17_40.jpg")
+        
         cameraController = CameraController()
         image = cameraController.shoot(detectConfig)
         image_processor = ImageProcessor(image, detectConfig)
@@ -146,7 +149,17 @@ class SectionCalculator(object):
         for section in self.sections:
             diff = section.xEnd - section.xStart
             xValues.append(section.xEnd - (diff / 2))
-        avg = reduce(lambda x, y: x + y, xValues) / len(xValues)
+        return self.calculateAvg(xValues)
+
+    def calculateAvg(self, values):
+        if not isinstance(values, list):
+            return 0;
+        summe = 0;
+        for value in values:
+            summe += value
+        if summe == 0:
+            return 0;
+        avg = summe / len(values)
         return avg
 
 
