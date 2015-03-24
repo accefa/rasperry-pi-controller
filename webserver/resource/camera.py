@@ -1,6 +1,5 @@
 import json
 import os
-import socket
 import web
 from config import detectionconfig
 from config.detectionconfig import DetectionConfig
@@ -12,9 +11,6 @@ urls = (
 
 app_camera = web.application(urls, locals())
 
-CONFIG_KEY = 'config'
-IMAGE_KEY = 'image'
-
 
 class Camera:
     def GET(self, path):
@@ -25,15 +21,11 @@ class Camera:
             
             config_dict = detectionConfig.get_as_dict()
             image_url = self.get_image_url(config_dict[detectionconfig.IMAGE_PATH_KEY])
-            response_dict = {
-                CONFIG_KEY: config_dict,
-                IMAGE_KEY: image_url
-            }
-            response_dict[CONFIG_KEY].pop(detectionconfig.IMAGE_PATH_KEY)
+            config_dict[detectionconfig.IMAGE_PATH_KEY] = image_url
 
             web.header('Content-type', 'text/json')
             web.ok()
-            return json.dumps(response_dict)
+            return json.dumps(config_dict)
         except (TypeError, ValueError) as e:
             web.header('Content-type', 'text/html')
             web.internalerror()

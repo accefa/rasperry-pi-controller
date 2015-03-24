@@ -7,7 +7,7 @@ QUALITY_DEFAULT = 90
 QUALITY_KEY = 'quality'
 
 CROP_X_DEFAULT = 0
-CROP_X_KEY = 'crop_x'
+CROP_X_KEY = 'cropX'
 
 CONTRAST_DEFAULT = 0
 CONTRAST_KEY = 'contrast'
@@ -16,16 +16,16 @@ GREYSCALE_DEFAULT = True
 GREYSCALE_KEY = 'greyscale'
 
 GREYSCALE_THRESHOLD_DEFAULT = 0
-GREYSCALE_THRESHOLD_KEY = 'greyscale_threshold'
+GREYSCALE_THRESHOLD_KEY = 'greyscaleThreshold'
 
 LINE_H_DEFAULT = 1
-LINE_H_KEY = 'line_h'
+LINE_H_KEY = 'lineH'
 
 LINE_Y_DEFAULT = 0
-LINE_Y_KEY = 'line_y'
+LINE_Y_KEY = 'lineY'
 
 IMAGE_PATH_DEFAULT = os.path.dirname(__file__) + '/../images/basket.jpeg'
-IMAGE_PATH_KEY = 'image_path'
+IMAGE_PATH_KEY = 'image'
 
 
 class DetectionConfig(object):
