@@ -24,7 +24,7 @@ LINE_H_KEY = 'lineH'
 LINE_Y_DEFAULT = 0
 LINE_Y_KEY = 'lineY'
 
-IMAGE_PATH_DEFAULT = os.path.dirname(__file__) + '/../images/basket.jpeg'
+IMAGE_PATH_DEFAULT = os.path.dirname(__file__) + '/../static/detected.jpg'
 IMAGE_PATH_KEY = 'image'
 
 
