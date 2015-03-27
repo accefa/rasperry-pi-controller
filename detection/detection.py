@@ -1,20 +1,23 @@
 import os
-#from PIL import Image
+import platform
+from PIL import Image
 from PIL import ImageFont
 from PIL import ImageDraw
 import logging
-from Camera import CameraController
 
 # Detektions-Klasse. Interagiert mit der Kamera.
 class Detection(object):
     def detect(self, detectConfig):
         
         logging.debug("Starte Detektierung")
-        
-        # image = Image.open(os.path.dirname(__file__) + "/../images/greyscaleandcontrast_quality50_17_40.jpg")
-        
-        cameraController = CameraController()
-        image = cameraController.shoot(detectConfig)
+
+        if platform.system() == 'Linux':
+            camera = __import__('Camera')
+            camera_controller = camera.CameraController()
+            image = camera_controller.shoot(detectConfig)
+        else:
+            image = Image.open(os.path.dirname(__file__) + "/../images/greyscaleandcontrast_quality50_17_40.jpg")
+
         image_processor = ImageProcessor(image, detectConfig)
         image_processor.process_image()
 
@@ -153,12 +156,12 @@ class SectionCalculator(object):
 
     def calculateAvg(self, values):
         if not isinstance(values, list):
-            return 0;
-        summe = 0;
+            return 0
+        summe = 0
         for value in values:
             summe += value
         if summe == 0:
-            return 0;
+            return 0
         avg = summe / len(values)
         return avg
 
