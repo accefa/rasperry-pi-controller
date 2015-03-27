@@ -6,6 +6,9 @@ rasperry-pi-controller.iml
 # Konfiguration auf jedem PC unterschiedlich
 *_config.json
 
+# Generierte Bilder ignorieren
+basket.jpeg
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
