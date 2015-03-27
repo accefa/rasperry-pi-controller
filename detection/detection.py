@@ -12,9 +12,8 @@ class Detection(object):
         logging.debug("Starte Detektierung")
 
         if platform.system() == 'Linux':
-            camera = __import__('Camera')
-            camera_controller = camera.CameraController()
-            image = camera_controller.shoot(detectConfig)
+            shoot = __import__('detection.Camera', fromlist=['shoot']).shoot
+            image = shoot(detectConfig)
         else:
             image = Image.open(os.path.dirname(__file__) + "/../images/greyscaleandcontrast_quality50_17_40.jpg")
 
