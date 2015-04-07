@@ -36,7 +36,8 @@ class Camera:
             config_dict = json.loads(web.data())
 
             detection_config = DetectionConfig()
-            config_dict.pop(detectionconfig.IMAGE_PATH_KEY)
+            if detectionconfig.IMAGE_PATH_KEY in config_dict:
+                config_dict.pop(detectionconfig.IMAGE_PATH_KEY)
             detection_config.set_from_dict(config_dict)
 
             web.header('Content-type', 'text/json')
