@@ -37,7 +37,7 @@ class CameraTest(unittest.TestCase):
         self.assertEquals(request.status, 406)
 
     def test_camera_put_json(self):
-        request = self.testApp.put('/camera', self._validJSON, expect_errors=True)
+        request = self.testApp.put('/camera', self._validJSON)
         self.assertEquals(request.status, 200)
         self.assertEquals(request.header_dict['content-type'], 'text/json')
 
