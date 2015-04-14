@@ -1,5 +1,7 @@
-import web
 import json
+import platform
+
+import web
 
 
 urls = (
@@ -21,7 +23,8 @@ class Start:
             if rpm < 0:
                 raise ValueError
 
-            # TODO Call ET-Interface
+            bldc_serial = get_bldc_serial()
+            bldc_serial.start(rpm)
 
             web.header('Content-type', 'text/json')
             web.ok()
@@ -33,7 +36,8 @@ class Start:
 
 class Stop:
     def POST(self, path):
-        # TODO Call ET-Interface
+        bldc_serial = get_bldc_serial()
+        bldc_serial.stop()
 
         web.header('Content-type', 'text/json')
         web.ok()
@@ -41,7 +45,19 @@ class Stop:
 
 class Reset:
     def POST(self, path):
-        # TODO Call ET-Interface
+        bldc_serial = get_bldc_serial()
+        bldc_serial.reset()
 
         web.header('Content-type', 'text/json')
         web.ok()
+
+
+def get_bldc_serial():
+    bldc_serial_class_name = 'BldcSerial'
+
+    if platform.system() == 'Linux':
+        bldc_serial_module = __import__('serial.bldc.bldc_serial', fromlist=[bldc_serial_class_name])
+    else:
+        bldc_serial_module = __import__('serial.bldc.bldc_stub', fromlist=[bldc_serial_class_name])
+
+    return getattr(bldc_serial_module, bldc_serial_class_name)
