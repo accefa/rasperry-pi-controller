@@ -4,7 +4,7 @@ class BldcSerial:
 
     @staticmethod
     def start(rpm):
-        print 'SERIAL: BLDC gestartet mit ' + str(rpm) + " RPM"
+        print 'SERIAL: BLDC gestartet mit ' + str(rpm) + ' RPM'
 
     @staticmethod
     def stop():

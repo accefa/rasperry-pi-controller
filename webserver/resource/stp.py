@@ -1,5 +1,7 @@
-import web
+import platform
 import json
+
+import web
 
 
 urls = (
@@ -14,11 +16,11 @@ class Start:
     def POST(self, path):
         try:
             web_dict = json.loads(web.data())
-            print web_dict
 
             steps = web_dict['steps']
 
-            # TODO Call ET-Interface
+            stp_serial = get_stp_serial()
+            stp_serial.start(steps)
 
             web.header('Content-type', 'text/json')
             web.ok()
@@ -30,7 +32,19 @@ class Start:
 
 class Reset:
     def POST(self, path):
-        # TODO Call ET-Interface
+        stp_serial = get_stp_serial()
+        stp_serial.reset()
 
         web.header('Content-type', 'text/json')
         web.ok()
+
+
+def get_stp_serial():
+    stp_serial_class_name = 'StpSerial'
+
+    if platform.system() == 'Linux':
+        stp_serial_module = __import__('serial.stp.stp_serial', fromlist=[stp_serial_class_name])
+    else:
+        stp_serial_module = __import__('serial.stp.stp_stub', fromlist=[stp_serial_class_name])
+
+    return getattr(stp_serial_module, stp_serial_class_name)
