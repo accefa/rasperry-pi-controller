@@ -41,10 +41,11 @@ class Reset:
 
 def get_dc_serial():
     dc_serial_class_name = 'DcSerial'
+    dc_serial_base_module = 'piserial.dc'
 
     if platform.system() == 'Linux':
-        dc_serial_module = __import__('serial.dc.dc_serial', fromlist=[dc_serial_class_name])
+        dc_serial_module = __import__(dc_serial_base_module + '.' + 'dc_serial', fromlist=[dc_serial_class_name])
     else:
-        dc_serial_module = __import__('serial.dc.dc_stub', fromlist=[dc_serial_class_name])
+        dc_serial_module = __import__(dc_serial_base_module + '.' + 'dc_stub', fromlist=[dc_serial_class_name])
 
     return getattr(dc_serial_module, dc_serial_class_name)

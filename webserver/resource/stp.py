@@ -41,10 +41,11 @@ class Reset:
 
 def get_stp_serial():
     stp_serial_class_name = 'StpSerial'
+    stp_serial_base_module = 'piserial.stp'
 
     if platform.system() == 'Linux':
-        stp_serial_module = __import__('serial.stp.stp_serial', fromlist=[stp_serial_class_name])
+        stp_serial_module = __import__(stp_serial_base_module + '.' + 'stp_serial', fromlist=[stp_serial_class_name])
     else:
-        stp_serial_module = __import__('serial.stp.stp_stub', fromlist=[stp_serial_class_name])
+        stp_serial_module = __import__(stp_serial_base_module + '.' + 'stp_stub', fromlist=[stp_serial_class_name])
 
     return getattr(stp_serial_module, stp_serial_class_name)

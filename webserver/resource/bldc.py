@@ -54,10 +54,12 @@ class Reset:
 
 def get_bldc_serial():
     bldc_serial_class_name = 'BldcSerial'
+    bldc_serial_base_module = 'piserial.bldc'
 
     if platform.system() == 'Linux':
-        bldc_serial_module = __import__('serial.bldc.bldc_serial', fromlist=[bldc_serial_class_name])
+        bldc_serial_module = __import__(bldc_serial_base_module + '.' + 'bldc_serial',
+                                        fromlist=[bldc_serial_class_name])
     else:
-        bldc_serial_module = __import__('serial.bldc.bldc_stub', fromlist=[bldc_serial_class_name])
+        bldc_serial_module = __import__(bldc_serial_base_module + '.' + 'bldc_stub', fromlist=[bldc_serial_class_name])
 
     return getattr(bldc_serial_module, bldc_serial_class_name)
