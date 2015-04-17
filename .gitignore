@@ -7,7 +7,7 @@ rasperry-pi-controller.iml
 *_config.json
 
 # Generierte Bilder ignorieren
-detected.jpeg
+detected.jpg
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
