@@ -18,5 +18,9 @@ class DcSerial:
         command.execute('DC on')
 
     @staticmethod
+    def stop():
+        command.execute('DC off')
+
+    @staticmethod
     def reset():
         command.execute('DC reset')

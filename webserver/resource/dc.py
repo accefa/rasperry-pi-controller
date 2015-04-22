@@ -6,6 +6,7 @@ import web
 urls = (
     '(.*)/forward', 'Forward',
     '(.*)/backward', 'Backward',
+    '(.*)/stop', 'Stop',
     '(.*)/reset', 'Reset'
 )
 
@@ -25,6 +26,15 @@ class Backward:
     def POST(self, path):
         dc_serial = get_dc_serial()
         dc_serial.backward()
+
+        web.header('Content-type', 'text/json')
+        web.ok()
+
+
+class Stop:
+    def POST(self, path):
+        dc_serial = get_dc_serial()
+        dc_serial.stop()
 
         web.header('Content-type', 'text/json')
         web.ok()
