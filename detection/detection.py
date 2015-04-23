@@ -5,7 +5,7 @@ from PIL import ImageFont
 from PIL import ImageDraw
 import logging
 
-# Detektions-Klasse. Interagiert mit der Kamera.
+# Detektions-Klasse. Interagiert mit der Kamera. Detect gibt die Anzahl Steps zurück.
 class Detection(object):
     def detect(self, detectConfig):
         
@@ -18,8 +18,7 @@ class Detection(object):
             image = Image.open(os.path.dirname(__file__) + "/../images/greyscaleandcontrast_quality50_17_40.jpg")
 
         image_processor = ImageProcessor(image, detectConfig)
-        image_processor.process_image()
-
+        return image_processor.process_image()
 
 class ImageProcessor(object):
     def __init__(self, image, detectConfig):
@@ -44,14 +43,23 @@ class ImageProcessor(object):
         else:
             logging.warning('Kein seitlicher Zuschnitt. Cropx ist mit ' + str(cropx) + ' gross. Bild ist nur ' + str(self.getImageWidth()) + ' breit.')
             # TODO warning
-        
 
     def process_image(self):
         self.crop_image()
         xPoint = self.analyzeLine(self.detectConfig.line_y, self.detectConfig.line_h)
-        self.drawAngle(180)  # TODO Pass correct angle
+        # TODO 1280 nicht fix.
+        steps = self.calculateSteps(xPoint, 1280, self.detectConfig.crop_x)
+        steps = round(steps)
+        self.drawAngle(steps)
         self.drawCrosshairs(xPoint, self.detectConfig.line_y)
         self.saveImage()
+        return steps
+        
+	def calculateSteps(self, x, width, zuschnitt):
+		c = width / 2 - zuschnitt
+		k = float(0.0023736)
+		tmp=float(float(float(90/float(c)) * float(float(x)-float(c))/190))
+   		return float(math.atanh(tmp)/float(k))
 
     def analyzeLine(self, yPos, rangeHeight):
         if yPos > self.getImageHeight():

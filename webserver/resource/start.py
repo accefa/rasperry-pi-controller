@@ -12,7 +12,6 @@ app_start = web.application(urls, locals())
 
 CALLBACK_URL_KEY = 'url'
 
-
 class Start:
     def PUT(self, path):
         try:
@@ -25,7 +24,8 @@ class Start:
 
 			# TODO Standort ermitteln
             config = DetectionConfig()
-            Detection().detect(config)
+            steps = Detection().detect(config)
+			print(str(steps))
 
 			# TODO X-Koordiante auf Anzahl Schritte ummappen
 			
