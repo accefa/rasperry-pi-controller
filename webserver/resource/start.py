@@ -25,7 +25,7 @@ class Start:
 			# TODO Standort ermitteln
             config = DetectionConfig()
             steps = Detection().detect(config)
-			print(str(steps))
+            print(str(steps))
 
 			# TODO X-Koordiante auf Anzahl Schritte ummappen
 			
@@ -35,7 +35,7 @@ class Start:
 			
 			# TODO Starten mit Ballnachschub
 			
-			# TODO Alle Motoren abschalten und zurücksetzen
+			# TODO Alle Motoren abschalten und zuruecksetzen
 			
 			# TODO Callback oder Prozess einfach beenden
 			

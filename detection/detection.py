@@ -5,7 +5,7 @@ from PIL import ImageFont
 from PIL import ImageDraw
 import logging
 
-# Detektions-Klasse. Interagiert mit der Kamera. Detect gibt die Anzahl Steps zurück.
+# Detektions-Klasse. Interagiert mit der Kamera.
 class Detection(object):
     def detect(self, detectConfig):
         
