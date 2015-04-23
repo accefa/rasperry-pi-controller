@@ -23,13 +23,22 @@ class Start:
             else:
                 raise ValueError('No url key found')
 
+			# TODO Standort ermitteln
             config = DetectionConfig()
             Detection().detect(config)
 
-            # TODO ET-Schnittstelle aufrufen
-
-            # TODO Callback Url aufrufen
-
+			# TODO X-Koordiante auf Anzahl Schritte ummappen
+			
+			# TODO Stepper Schritte delegieren
+			
+			# TODO Rad anwerfen
+			
+			# TODO Starten mit Ballnachschub
+			
+			# TODO Alle Motoren abschalten und zurücksetzen
+			
+			# TODO Callback oder Prozess einfach beenden
+			
             web.header('Content-type', 'text/json')
             web.ok()
             return callback_url
