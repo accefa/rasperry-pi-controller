@@ -2,10 +2,6 @@ import io
 from picamera import PiCamera
 from PIL import Image
 
-# dynamic load this classes
-# https://lextoumbourou.com/blog/posts/dynamically-loading-modules-and-classes-in-python/
-
-
 def shoot(detectConfig):
         stream = io.BytesIO()
         try:

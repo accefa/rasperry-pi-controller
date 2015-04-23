@@ -1,5 +1,6 @@
 import os
 import platform
+import math
 from PIL import Image
 from PIL import ImageFont
 from PIL import ImageDraw
@@ -47,19 +48,18 @@ class ImageProcessor(object):
     def process_image(self):
         self.crop_image()
         xPoint = self.analyzeLine(self.detectConfig.line_y, self.detectConfig.line_h)
-        # TODO 1280 nicht fix.
-        steps = self.calculateSteps(xPoint, 1280, self.detectConfig.crop_x)
-        steps = round(steps)
+        steps = self.calculateSteps(xPoint, self.getImageWidth())
+        steps = int(steps)
         self.drawAngle(steps)
         self.drawCrosshairs(xPoint, self.detectConfig.line_y)
         self.saveImage()
         return steps
-        
-	def calculateSteps(self, x, width, zuschnitt):
-		c = width / 2 - zuschnitt
-		k = float(0.0023736)
-		tmp=float(float(float(90/float(c)) * float(float(x)-float(c))/190))
-   		return float(math.atanh(tmp)/float(k))
+
+    def calculateSteps(self, x, width):
+        c = float(width / 2)
+        k = float(0.0023736)
+        tmp=float(float(float(90/c) * float(float(x)-float(c))/190))
+        return float(math.atanh(tmp)/float(k))
 
     def analyzeLine(self, yPos, rangeHeight):
         if yPos > self.getImageHeight():
@@ -101,7 +101,7 @@ class ImageProcessor(object):
     def drawAngle(self, angle):
         font = ImageFont.truetype(os.path.dirname(os.path.realpath(__file__)) + "/../config/Arial.ttf", 100)
         draw = ImageDraw.Draw(self.image)
-        x = self.getImageWidth() - 180
+        x = self.getImageWidth() - 260
         y = self.getImageHeight() - 110
         draw.text((x, y), str(angle), font=font, fill=self.COLOR_RED())
 
