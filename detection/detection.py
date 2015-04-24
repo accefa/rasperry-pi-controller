@@ -48,18 +48,19 @@ class ImageProcessor(object):
     def process_image(self):
         self.crop_image()
         xPoint = self.analyzeLine(self.detectConfig.line_y, self.detectConfig.line_h)
-        steps = self.calculateSteps(xPoint, self.getImageWidth())
+        steps = self.calculateSteps(xPoint, self.getImageWidth(), self.detectConfig.crop_x)
         steps = int(steps)
         self.drawAngle(steps)
         self.drawCrosshairs(xPoint, self.detectConfig.line_y)
         self.saveImage()
         return steps
 
-    def calculateSteps(self, x, width):
-        c = float(width / 2)
-        k = float(0.0023736)
-        tmp=float(float(float(90/c) * float(float(x)-float(c))/190))
-        return float(math.atanh(tmp)/float(k))
+    def calculateSteps(self, x, width, zuschnitt):
+        winkelStepperProSchritt = float(0.0023736)
+        c = float(float(width) / 2)
+        d = float(99) * float(1 - float(zuschnitt / 640))
+        tmp=float(float(float(float(d)/float(c)) * float(float(x)-float(c))/190))
+        return float(math.atanh(tmp)/float(winkelStepperProSchritt))
 
     def analyzeLine(self, yPos, rangeHeight):
         if yPos > self.getImageHeight():
