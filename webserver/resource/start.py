@@ -1,5 +1,6 @@
 import json
 import web
+import platform
 from detection.detection import Detection
 from config.detectionconfig import DetectionConfig
 
@@ -14,29 +15,61 @@ CALLBACK_URL_KEY = 'url'
 
 class Start:
     def PUT(self, path):
-        try:
-            request_dict = json.loads(web.data())
+         print("Serielle Schnittstellen laden")
+         stp_serial = get_stp_serial()
+         bldc_serial = get_bldc_serial()
+         dc_serial = get_dc_serial()
+         
+         print("Reset der Motoren")
+         stp_serial.reset()
+         bldc_serial.reset()
+         dc_serial.reset()
+         
+         print("Bild erkennen")
+         config = DetectionConfig()
+         steps = Detection().detect(config)
+         
+         print("Stepper rangieren. Schritte: " + str(steps))
+         stp_serial.start(steps)
 
-            if CALLBACK_URL_KEY in request_dict:
-                callback_url = request_dict[CALLBACK_URL_KEY]
-            else:
-                raise ValueError('No url key found')
+         rpm = 8000;
+         print("Schwungrad in Kampfmodus setzen mit RPM: " + str(rpm))
+         bldc_serial.start(rpm)
 
-            # Steps ermitteln
-            config = DetectionConfig()
-            steps = Detection().detect(config)
-            print(str(steps))
+         print("Ballnachschub starten")
+         dc_serial.forward()
+         
+         print("Motoren abschalten")
+         bldc_serial.stop()
+         
+         web.header('Content-type', 'text/json')
+         web.ok()
+         return 'done'
 
-            # TODO Stepper Schritte delegieren
-            # TODO Rad anwerfen
-            # TODO Starten mit Ballnachschub
-            # TODO Alle Motoren abschalten und zuruecksetzen
-            # TODO Prozess einfach beenden
+def get_stp_serial():
+    stp_serial_class_name = 'StpSerial'
+    stp_serial_base_module = 'piserial.stp'
+    if platform.system() == 'Linux':
+        stp_serial_module = __import__(stp_serial_base_module + '.' + 'stp_serial', fromlist=[stp_serial_class_name])
+    else:
+        stp_serial_module = __import__(stp_serial_base_module + '.' + 'stp_stub', fromlist=[stp_serial_class_name])
+    return getattr(stp_serial_module, stp_serial_class_name)
 
-            web.header('Content-type', 'text/json')
-            web.ok()
-            return callback_url
-        except (TypeError, ValueError) as e:
-            web.header('Content-type', 'text/html')
-            web.notacceptable()
-            return e.message
+def get_bldc_serial():
+    bldc_serial_class_name = 'BldcSerial'
+    bldc_serial_base_module = 'piserial.bldc'
+    if platform.system() == 'Linux':
+        bldc_serial_module = __import__(bldc_serial_base_module + '.' + 'bldc_serial',
+                                        fromlist=[bldc_serial_class_name])
+    else:
+        bldc_serial_module = __import__(bldc_serial_base_module + '.' + 'bldc_stub', fromlist=[bldc_serial_class_name])
+    return getattr(bldc_serial_module, bldc_serial_class_name)
+
+def get_dc_serial():
+    dc_serial_class_name = 'DcSerial'
+    dc_serial_base_module = 'piserial.dc'
+    if platform.system() == 'Linux':
+        dc_serial_module = __import__(dc_serial_base_module + '.' + 'dc_serial', fromlist=[dc_serial_class_name])
+    else:
+        dc_serial_module = __import__(dc_serial_base_module + '.' + 'dc_stub', fromlist=[dc_serial_class_name])
+    return getattr(dc_serial_module, dc_serial_class_name)
