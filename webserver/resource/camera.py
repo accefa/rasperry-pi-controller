@@ -16,8 +16,6 @@ class Camera:
     def GET(self, path):
         try:
             detectionConfig = DetectionConfig()
-            detection = Detection()
-            detection.detect(detectionConfig)
             
             config_dict = detectionConfig.get_as_dict()
             image_url = self.get_image_url(config_dict[detectionconfig.IMAGE_PATH_KEY])
@@ -26,6 +24,20 @@ class Camera:
             web.header('Content-type', 'text/json')
             web.ok()
             return json.dumps(config_dict)
+        except (TypeError, ValueError) as e:
+            web.header('Content-type', 'text/html')
+            web.internalerror()
+            return e.message
+            
+    def POST(self, path):
+        try:
+            detectionConfig = DetectionConfig()
+            detection = Detection()
+            detection.detect(detectionConfig)
+            
+            web.header('Content-type', 'text/plain')
+            web.ok()
+            return 'done'
         except (TypeError, ValueError) as e:
             web.header('Content-type', 'text/html')
             web.internalerror()
