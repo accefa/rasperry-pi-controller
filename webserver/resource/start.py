@@ -1,6 +1,7 @@
 import json
 import web
 import platform
+import logging
 from detection.detection import Detection
 from config.detectionconfig import DetectionConfig
 
@@ -11,40 +12,43 @@ urls = (
 
 app_start = web.application(urls, locals())
 
-CALLBACK_URL_KEY = 'url'
-
 class Start:
     def PUT(self, path):
-         print("Serielle Schnittstellen laden")
-         stp_serial = get_stp_serial()
-         bldc_serial = get_bldc_serial()
-         dc_serial = get_dc_serial()
+         try:
+             logging.info("Serielle Schnittstellen laden")
+             stp_serial = get_stp_serial()
+             bldc_serial = get_bldc_serial()
+             dc_serial = get_dc_serial()
          
-         print("Reset der Motoren")
-         stp_serial.reset()
-         bldc_serial.reset()
-         dc_serial.reset()
+             logging.info("Reset der Motoren")
+             stp_serial.reset()
+             bldc_serial.reset()
+             dc_serial.reset()
          
-         print("Bild erkennen")
-         config = DetectionConfig()
-         steps = Detection().detect(config)
+             logging.info("Bild erkennen")
+             config = DetectionConfig()
+             steps = Detection().detect(config)
          
-         print("Stepper rangieren. Schritte: " + str(steps))
-         stp_serial.start(steps)
+             logging.info("Stepper rangieren. Schritte: " + str(steps))
+             stp_serial.start(steps)
 
-         rpm = 8000;
-         print("Schwungrad in Kampfmodus setzen mit RPM: " + str(rpm))
-         bldc_serial.start(rpm)
+             rpm = 8000;
+             logging.info("Schwungrad in Kampfmodus setzen mit RPM: " + str(rpm))
+             bldc_serial.start(rpm)
 
-         print("Ballnachschub starten")
-         dc_serial.forward()
+             logging.info("Ballnachschub starten")
+             dc_serial.forward()
          
-         print("Motoren abschalten")
-         bldc_serial.stop()
+             logging.info("Motoren abschalten")
+             bldc_serial.stop()
          
-         web.header('Content-type', 'text/json')
-         web.ok()
-         return 'done'
+             web.header('Content-type', 'text/plain')
+             web.ok()
+             return 'done'
+         except (TypeError, ValueError) as e:
+            web.header('Content-type', 'text/html')
+            web.internalerror()
+            return e.message
 
 def get_stp_serial():
     stp_serial_class_name = 'StpSerial'
