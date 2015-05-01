@@ -3,15 +3,18 @@ import time
 import serial
 
 
-DEVICE = '/dev/ttyACM0'
+DEVICE = '/dev/ttyAMA0'
 BAUDRATE = 38400
 
-
 def execute(command):
+    print("Debug: Execute " + command)
     ser = serial.Serial(DEVICE, BAUDRATE)
     if ser.isOpen() is True:
+        print("Debug: Serial is open")
         __send_to_serial(command, ser)
-    ser.close()
+        ser.close()
+    else:
+        print("Debug: Serial was not open. So nothing happens.")
 
 
 def __send_to_serial(cmd, ser):
