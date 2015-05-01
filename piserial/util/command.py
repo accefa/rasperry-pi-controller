@@ -3,31 +3,40 @@ import time
 import serial
 
 
-DEVICE = '/dev/ttyAMA0'
+DEVICE = "/dev/ttyACM0"
 BAUDRATE = 38400
+TIMEOUT = 2
 
 def execute(command):
     print("Debug: Execute " + command)
-    ser = serial.Serial(DEVICE, BAUDRATE)
+    ser = serial.Serial(port=DEVICE, baudrate=BAUDRATE, timeout=TIMEOUT)
     if ser.isOpen() is True:
-        print("Debug: Serial is open")
+        print("Serial is open")
         __send_to_serial(command, ser)
         ser.close()
     else:
-        print("Debug: Serial was not open. So nothing happens.")
+        print("Serial was not open. So nothing happens.")
 
 
 def __send_to_serial(cmd, ser):
-    cmd += '\n\n'
-    term = 'accefa>'
+    cmd += "\n"
+    term = "accefa>"
     ser.write(cmd.encode('utf-8'))
+    ser.flush()
     time.sleep(1)
-    answer = ser.readline()
+    answer = ser.read(1000)
+    print("answer: " + answer)
     print("start waiting")
+    maxIteration = 8
+    counter = 0
     while answer.find(term.encode('utf-8')) < 0:
+        if counter > maxIteration:
+            break
+        counter = counter + 1
         answer = answer.decode('utf-8')
-        answer = answer.replace('\n', '')
+        answer = answer.replace("\n", "")
         print("still waiting");
-        if answer != '':
+        if answer != "":
             print("\t" + answer)
-        answer = ser.readline()
+        answer = ser.read(1000)
+    

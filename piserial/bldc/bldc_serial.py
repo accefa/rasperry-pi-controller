@@ -7,14 +7,14 @@ class BldcSerial:
 
     @staticmethod
     def start(rpm):
-        command.execute('BLDC on')
-        command.execute('BLDC setrpm ' + str(rpm))
+        command.execute("BLDC on")
+        command.execute("BLDC setrpm " + str(rpm))
 
     @staticmethod
     def stop():
-        command.execute('BLDC off')
+        command.execute("BLDC off")
 
     @staticmethod
     def reset():
-        command.execute('BLDC reset')
+        command.execute("BLDC reset")
 

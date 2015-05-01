@@ -7,10 +7,10 @@ class StpSerial:
 
     @staticmethod
     def start(steps):
-        command.execute('STP on')
-        command.execute('STP move ' + str(steps))
+        command.execute("STP on")
+        command.execute("STP move " + str(steps))
 
 
     @staticmethod
     def reset():
-        command.execute('STP reset')
+        command.execute("STP reset")
