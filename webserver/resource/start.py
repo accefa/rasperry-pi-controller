@@ -24,6 +24,8 @@ class Start:
              stp_serial.reset()
              bldc_serial.reset()
              dc_serial.reset()
+             
+             # TODO wait einbauen- wie lange brauchen reset im schlechtestens fall maximal?
          
              logging.info("Bild erkennen")
              config = DetectionConfig()
@@ -31,13 +33,20 @@ class Start:
          
              logging.info("Stepper rangieren. Schritte: " + str(steps))
              stp_serial.start(steps)
+             
+             # TODO Wait einbauen - wie lange braucht die ausrichtung maximal?
 
+             # TODO wie viele RPM????
              rpm = 8000;
              logging.info("Schwungrad in Kampfmodus setzen mit RPM: " + str(rpm))
              bldc_serial.start(rpm)
+             
+             # todo wait einbauen
 
              logging.info("Ballnachschub starten")
              dc_serial.forward()
+         
+             # TODO wait einbauen
          
              logging.info("Motoren abschalten")
              bldc_serial.stop()
