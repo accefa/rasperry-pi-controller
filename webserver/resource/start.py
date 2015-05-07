@@ -2,6 +2,7 @@ import json
 import web
 import platform
 import logging
+import time
 from detection.detection import Detection
 from config.detectionconfig import DetectionConfig
 
@@ -25,32 +26,29 @@ class Start:
              bldc_serial.reset()
              dc_serial.reset()
              
-             # TODO wait einbauen- wie lange brauchen reset im schlechtestens fall maximal?
-         
              logging.info("Bild erkennen")
              config = DetectionConfig()
              steps = Detection().detect(config)
-         
+
              logging.info("Stepper rangieren. Schritte: " + str(steps))
              stp_serial.start(steps)
-             
-             # TODO Wait einbauen - wie lange braucht die ausrichtung maximal?
 
-             # TODO wie viele RPM????
-             rpm = 8000;
+             time.sleep(5)
+
+             rpm = 5000;
              logging.info("Schwungrad in Kampfmodus setzen mit RPM: " + str(rpm))
              bldc_serial.start(rpm)
              
-             # todo wait einbauen
+             time.sleep(3)
 
              logging.info("Ballnachschub starten")
              dc_serial.forward()
-         
-             # TODO wait einbauen
-         
+
+             time.sleep(7)
+
              logging.info("Motoren abschalten")
              bldc_serial.stop()
-         
+
              web.header('Content-type', 'text/plain')
              web.ok()
              return 'done'
