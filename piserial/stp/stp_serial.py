@@ -8,9 +8,15 @@ class StpSerial:
     @staticmethod
     def start(steps):
         command.execute("STP on")
-        command.execute("STP move " + str(steps))
+        if (steps < 0):
+            steps = (-1) * steps
+            command.execute("stepper move r " + str(steps))
+        else:
+            command.execute("stepper move f " + str(steps))
 
 
     @staticmethod
     def reset():
+        command.execute("stepper reset")
+        command.execute("stepper softhiz")
         command.execute("STP reset")

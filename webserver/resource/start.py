@@ -30,12 +30,13 @@ class Start:
              config = DetectionConfig()
              steps = Detection().detect(config)
 
+             steps = (-1) * steps;
              logging.info("Stepper rangieren. Schritte: " + str(steps))
              stp_serial.start(steps)
 
              time.sleep(5)
 
-             rpm = 5000;
+             rpm = 14000;
              logging.info("Schwungrad in Kampfmodus setzen mit RPM: " + str(rpm))
              bldc_serial.start(rpm)
              
@@ -44,7 +45,7 @@ class Start:
              logging.info("Ballnachschub starten")
              dc_serial.forward()
 
-             time.sleep(7)
+             time.sleep(10)
 
              logging.info("Motoren abschalten")
              bldc_serial.stop()

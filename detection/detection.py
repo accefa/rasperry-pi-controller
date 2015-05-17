@@ -60,7 +60,7 @@ class ImageProcessor(object):
         c = float(float(width) / 2)
         d = float(99) * float(1 - float(zuschnitt / 640))
         tmp=float(float(float(float(d)/float(c)) * float(float(x)-float(c))/190))
-        return float(math.atanh(tmp)/float(winkelStepperProSchritt))
+        return float(math.atanh(tmp)/float(winkelStepperProSchritt)) * float(100)
 
     def analyzeLine(self, yPos, rangeHeight):
         if yPos > self.getImageHeight():
@@ -102,7 +102,7 @@ class ImageProcessor(object):
     def drawAngle(self, angle):
         font = ImageFont.truetype(os.path.dirname(os.path.realpath(__file__)) + "/../config/Arial.ttf", 100)
         draw = ImageDraw.Draw(self.image)
-        x = self.getImageWidth() - 260
+        x = self.getImageWidth() - 400
         y = self.getImageHeight() - 110
         draw.text((x, y), str(angle), font=font, fill=self.COLOR_RED())
 
