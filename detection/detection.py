@@ -5,6 +5,7 @@ from PIL import Image
 from PIL import ImageFont
 from PIL import ImageDraw
 import logging
+from __future__ import division
 
 # Detektions-Klasse. Interagiert mit der Kamera.
 class Detection(object):
@@ -56,11 +57,20 @@ class ImageProcessor(object):
         return steps
 
     def calculateSteps(self, x, width, zuschnitt):
-        winkelStepperProSchritt = float(0.0023736)
-        c = float(float(width) / 2)
-        d = float(99) * float(1 - float(zuschnitt / 640))
-        tmp=float(float(float(float(d)/float(c)) * float(float(x)-float(c))/190))
-        return float(math.atanh(tmp)/float(winkelStepperProSchritt)) * float(100)
+        schrittePro360 = 200
+        uebertragung = 22 / 290
+        abstandMaschineWandInCm = 190
+        
+        winkelProSchritt = 360 / schrittePro360
+        winkelProSchrittMitUebertragung = winkelProSchritt * uebertragung * math.pi / 180
+        
+        halbesBildPixelBreite = width / 2
+        halbesBildInCm = 99 * (1 - (zuschnitt / 640))
+        abstandKorbBildMitteInCm = halbesBildInCm / halbesBildPixelBreite * (x - halbesBildPixelBreite)
+        
+        winkel = math.atanh(abstandKorbBildMitteInCm / abstandMaschineWandInCm)
+        anzahlSchritte = winkel / winkelProSchrittMitUebertragung
+        return anzahlSchritte
 
     def analyzeLine(self, yPos, rangeHeight):
         if yPos > self.getImageHeight():
