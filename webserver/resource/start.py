@@ -13,39 +13,36 @@ urls = (
 
 app_start = web.application(urls, locals())
 
+# Mit Ervin abgesprochen
+# BLDC ON, BLDC SETRPM 10000, STP RESET, STP MOVE XY, DC UP, DC ON, BLDC OFF
+
 class Start:
     def PUT(self, path):
          try:
+             logging.info("Korb erkennen")
+             config = DetectionConfig()
+             steps = Detection().detect(config)
+             steps = (-1) * steps;
+             
              logging.info("Serielle Schnittstellen laden")
              stp_serial = get_stp_serial()
              bldc_serial = get_bldc_serial()
              dc_serial = get_dc_serial()
-         
-             logging.info("Reset der Motoren")
-             stp_serial.reset()
-             bldc_serial.reset()
-             dc_serial.reset()
              
-             logging.info("Bild erkennen")
-             config = DetectionConfig()
-             steps = Detection().detect(config)
-
-             steps = (-1) * steps;
-             logging.info("Stepper rangieren. Schritte: " + str(steps))
-             stp_serial.start(steps)
-
-             time.sleep(5)
-
-             rpm = 14000;
+             rpm = 10000; # TODO Optimaler Wert?
              logging.info("Schwungrad in Kampfmodus setzen mit RPM: " + str(rpm))
              bldc_serial.start(rpm)
              
-             time.sleep(3)
-
+             logging.info("Ballnachschub reseten")
+             stp_serial.reset() # TODO In Einrichtungsphase möglich!
+             
+             logging.info("Stepper rangieren. Schritte: " + str(steps))
+             stp_serial.start(steps)
+             
              logging.info("Ballnachschub starten")
              dc_serial.forward()
 
-             time.sleep(10)
+             time.sleep(8) # TODO Optimaler Wert
 
              logging.info("Motoren abschalten")
              bldc_serial.stop()
