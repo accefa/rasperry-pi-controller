@@ -11,7 +11,6 @@ def execute(command):
     print("Debug: Execute " + command)
     ser = serial.Serial(port=DEVICE, baudrate=BAUDRATE, timeout=TIMEOUT)
     if ser.isOpen() is True:
-        print("Serial is open")
         __send_to_serial(command, ser)
         ser.close()
     else:
@@ -25,8 +24,6 @@ def __send_to_serial(cmd, ser):
     ser.flush()
     time.sleep(1)
     answer = ser.read(1000)
-    print("answer: " + answer)
-    print("start waiting")
     maxIteration = 8
     counter = 0
     while answer.find(term.encode('utf-8')) < 0:

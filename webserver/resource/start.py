@@ -29,7 +29,7 @@ class Start:
              bldc_serial = get_bldc_serial()
              dc_serial = get_dc_serial()
              
-             rpm = 10000; # TODO Optimaler Wert?
+             rpm = 6250; # TODO Optimaler Wert?
              logging.info("Schwungrad in Kampfmodus setzen mit RPM: " + str(rpm))
              bldc_serial.start(rpm)
              

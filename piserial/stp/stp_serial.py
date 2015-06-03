@@ -17,6 +17,4 @@ class StpSerial:
 
     @staticmethod
     def reset():
-        command.execute("stepper reset")
-        command.execute("stepper softhiz")
         command.execute("STP reset")
