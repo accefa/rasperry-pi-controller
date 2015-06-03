@@ -57,7 +57,8 @@ class ImageProcessor(object):
         return steps
 
     def calculateSteps(self, x, width, zuschnitt):
-        schrittePro360 = 200
+        microstepsPerOneFullStep = 128
+        schrittePro360 = 200 * microstepsPerOneFullStep
         uebertragung = 22 / 290
         abstandMaschineWandInCm = 190
         
