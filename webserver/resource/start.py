@@ -34,7 +34,7 @@ class Start:
              bldc_serial.start(rpm)
              
              logging.info("Ballnachschub reseten")
-             stp_serial.reset() # TODO In Einrichtungsphase möglich!
+             stp_serial.reset() # koennte man in einrichtungsphase machen.
              
              logging.info("Stepper rangieren. Schritte: " + str(steps))
              stp_serial.start(steps)

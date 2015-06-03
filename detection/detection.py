@@ -1,3 +1,4 @@
+from __future__ import division
 import os
 import platform
 import math
@@ -5,7 +6,6 @@ from PIL import Image
 from PIL import ImageFont
 from PIL import ImageDraw
 import logging
-from __future__ import division
 
 # Detektions-Klasse. Interagiert mit der Kamera.
 class Detection(object):
