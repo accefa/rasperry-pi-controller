@@ -58,12 +58,14 @@ class ImageProcessor(object):
 
     def calculateSteps(self, x, width, zuschnitt):
         microstepsPerOneFullStep = 128
-        schrittePro360 = 200 * microstepsPerOneFullStep
+        # 200 * microstepsPerOneFullStep
+        schrittePro360 = 41655
         uebertragung = 22 / 290
         abstandMaschineWandInCm = 190
         
         winkelProSchritt = 360 / schrittePro360
-        winkelProSchrittMitUebertragung = winkelProSchritt * uebertragung * math.pi / 180
+        #uebertragung
+        winkelProSchrittMitUebertragung = winkelProSchritt * 1 * math.pi / 180
         
         halbesBildPixelBreite = width / 2
         halbesBildInCm = 99 * (1 - (zuschnitt / 640))
@@ -71,7 +73,7 @@ class ImageProcessor(object):
         
         winkel = math.atanh(abstandKorbBildMitteInCm / abstandMaschineWandInCm)
         anzahlSchritte = winkel / winkelProSchrittMitUebertragung
-        return anzahlSchritte
+        return anzahlSchritte * 0.8
 
     def analyzeLine(self, yPos, rangeHeight):
         if yPos > self.getImageHeight():
