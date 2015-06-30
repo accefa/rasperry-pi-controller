@@ -73,7 +73,7 @@ class ImageProcessor(object):
         
         winkel = math.atanh(abstandKorbBildMitteInCm / abstandMaschineWandInCm)
         anzahlSchritte = winkel / winkelProSchrittMitUebertragung
-        return anzahlSchritte * 0.85
+        return anzahlSchritte * 0.7
 
     def analyzeLine(self, yPos, rangeHeight):
         if yPos > self.getImageHeight():
