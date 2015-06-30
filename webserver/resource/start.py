@@ -42,7 +42,7 @@ class Start:
              logging.info("Ballnachschub starten")
              dc_serial.forward()
 
-             time.sleep(8) # TODO Optimaler Wert
+             time.sleep(9) # TODO Optimaler Wert
 
              logging.info("Motoren abschalten")
              bldc_serial.stop()
